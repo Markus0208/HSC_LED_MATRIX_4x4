@@ -1,0 +1,14 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Tue Apr 16 15:22:20 2024
+# Process ID: 12173
+# Current directory: /home/gab41928/hsc/Project/VIVADO
+# Command line: vivado
+# Log file: /home/gab41928/hsc/Project/VIVADO/vivado.log
+# Journal file: /home/gab41928/hsc/Project/VIVADO/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /home/gab41928/hsc/Project/V2/Main_Project_V2/Main_Project_V2.xpr
+update_compile_order -fileset sources_1

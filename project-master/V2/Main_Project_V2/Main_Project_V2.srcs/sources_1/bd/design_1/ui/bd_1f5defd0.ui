@@ -1,0 +1,382 @@
+{
+   "ActiveEmotionalView":"Docu_V2_2",
+   "Color Coded_ExpandedHierarchyInLayout":"",
+   "Color Coded_Layout":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port DDR -pg 1 -lvl 6 -x 1920 -y 750 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 6 -x 1920 -y 770 -defaultsOSRD
+preplace port LED_OUT_1 -pg 1 -lvl 6 -x 1920 -y 210 -defaultsOSRD
+preplace port LED_OUT_2 -pg 1 -lvl 6 -x 1920 -y 350 -defaultsOSRD
+preplace port LED_OUT_3 -pg 1 -lvl 6 -x 1920 -y 490 -defaultsOSRD
+preplace port LED_OUT_4 -pg 1 -lvl 6 -x 1920 -y 630 -defaultsOSRD
+preplace port sys_clock -pg 1 -lvl 0 -x 0 -y 570 -defaultsOSRD
+preplace inst axi_memory_init_0 -pg 1 -lvl 3 -x 860 -y 120 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 2 -x 450 -y 710 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 5 -x 1670 -y 820 -defaultsOSRD
+preplace inst mdm_0 -pg 1 -lvl 1 -x 130 -y 680 -defaultsOSRD
+preplace inst Interconnect_Register -pg 1 -lvl 2 -x 450 -y 430 -defaultsOSRD
+preplace inst axi_dma_CH1 -pg 1 -lvl 3 -x 860 -y 300 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD
+preplace inst Interconnect_DMA -pg 1 -lvl 4 -x 1260 -y 730 -defaultsOSRD
+preplace inst axi_dma_CH2 -pg 1 -lvl 3 -x 860 -y 460 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD -resize 320 136
+preplace inst axi_dma_CH3 -pg 1 -lvl 3 -x 860 -y 620 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD
+preplace inst axi_dma_CH4 -pg 1 -lvl 3 -x 860 -y 780 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 39 38 37 40 41} -defaultsOSRD -resize 320 136
+preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 130 -y 560 -defaultsOSRD
+preplace inst Channel4 -pg 1 -lvl 5 -x 1670 -y 630 -defaultsOSRD -resize 180 116
+preplace inst Channel1 -pg 1 -lvl 5 -x 1670 -y 210 -defaultsOSRD
+preplace inst Channel2 -pg 1 -lvl 5 -x 1670 -y 350 -defaultsOSRD -resize 180 116
+preplace inst Channel3 -pg 1 -lvl 5 -x 1670 -y 490 -defaultsOSRD
+preplace netloc clk_wiz_0_clk_out1 1 1 4 240 220 650 870 1060 980 1410
+preplace netloc proc_sys_reset_0_peripheral_aresetn 1 1 4 260 230 620 880 1070 990 1430
+preplace netloc mdm_0_Debug_SYS_Rst 1 1 1 N 690
+preplace netloc Project_0_LED_OUT 1 5 1 N 210
+preplace netloc Project_1_LED_OUT 1 5 1 N 350
+preplace netloc Project_CH3_LED_OUT 1 5 1 N 490
+preplace netloc Channel4_LED_OUT 1 5 1 N 630
+preplace netloc clk_wiz_0_locked 1 1 1 230 570n
+preplace netloc sys_clock_1 1 0 1 NJ 570
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 6 20 210 NJ 210 NJ 210 1040J 130 NJ 130 1870
+preplace netloc axi_interconnect_0_M00_AXI 1 4 1 1400 730n
+preplace netloc processing_system7_0_M_AXI_GP0 1 1 5 250 30 NJ 30 NJ 30 NJ 30 1880
+preplace netloc Interconnect_Register_M01_AXI 1 2 1 660 270n
+preplace netloc Interconnect_Register_M02_AXI 1 2 1 N 430
+preplace netloc axi_dma_1_M_AXIS_MM2S 1 3 2 NJ 430 1420
+preplace netloc axi_dma_1_M_AXI_MM2S 1 3 1 1050 450n
+preplace netloc axi_dma_0_M_AXIS_MM2S 1 3 2 NJ 270 1400
+preplace netloc axi_dma_CH1_M_AXI_MM2S 1 3 1 1060 290n
+preplace netloc axi_memory_init_0_M_AXI 1 3 1 1070 110n
+preplace netloc axi_dma_CH3_M_AXIS_MM2S 1 3 2 1040 470 N
+preplace netloc Interconnect_Register_M03_AXI 1 2 1 630 450n
+preplace netloc axi_dma_CH3_M_AXI_MM2S 1 3 1 N 610
+preplace netloc axi_dma_CH4_M_AXI_MM2S 1 3 1 1050 630n
+preplace netloc Interconnect_Register_M04_AXI 1 2 1 640 470n
+preplace netloc axi_dma_CH4_M_AXIS_MM2S 1 3 2 1040 970 1440
+preplace netloc processing_system7_0_DDR 1 5 1 N 750
+preplace netloc processing_system7_0_FIXED_IO 1 5 1 N 770
+levelinfo -pg 1 0 130 450 860 1260 1670 1920
+pagesize -pg 1 -db -bbox -sgen -120 0 2040 1000
+",
+   "Color Coded_ScaleFactor":"1.75",
+   "Color Coded_TopLeft":"-131,-57",
+   "Default View_ScaleFactor":"0.676235",
+   "Default View_TopLeft":"-240,-43",
+   "Docu_V2_2_DefaultLayers":"",
+   "Docu_V2_2_DefaultScaleFactor":"1.63457",
+   "Docu_V2_2_DefaultTopLeft":"-146,8",
+   "Docu_V2_2_ExpandedHierarchyInLayout":"",
+   "Docu_V2_2_Layers":"",
+   "Docu_V2_2_Layout":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port DDR -pg 1 -lvl 7 -x 2220 -y 60 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 7 -x 2220 -y 80 -defaultsOSRD
+preplace port LED_OUT_1 -pg 1 -lvl 7 -x 2220 -y 630 -defaultsOSRD
+preplace port LED_OUT_2 -pg 1 -lvl 7 -x 2220 -y 350 -defaultsOSRD
+preplace port LED_OUT_3 -pg 1 -lvl 7 -x 2220 -y 490 -defaultsOSRD
+preplace port LED_OUT_4 -pg 1 -lvl 7 -x 2220 -y 770 -defaultsOSRD
+preplace port sys_clock -pg 1 -lvl 0 -x 0 -y 190 -defaultsOSRD
+preplace inst axi_memory_init_0 -pg 1 -lvl 4 -x 1140 -y 690 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 2 -x 430 -y 330 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 6 -x 1970 -y 130 -defaultsOSRD
+preplace inst mdm_0 -pg 1 -lvl 1 -x 130 -y 300 -defaultsOSRD
+preplace inst Interconnect_Register -pg 1 -lvl 3 -x 780 -y 470 -defaultsOSRD
+preplace inst axi_dma_CH1 -pg 1 -lvl 4 -x 1140 -y 360 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD -resize 320 140
+preplace inst Interconnect_DMA -pg 1 -lvl 5 -x 1540 -y 880 -defaultsOSRD
+preplace inst axi_dma_CH2 -pg 1 -lvl 4 -x 1140 -y 180 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD -resize 320 140
+preplace inst axi_dma_CH3 -pg 1 -lvl 4 -x 1140 -y 530 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD -resize 320 140
+preplace inst axi_dma_CH4 -pg 1 -lvl 4 -x 1140 -y 850 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 39 38 37 40 41} -defaultsOSRD -resize 320 140
+preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 130 -y 180 -defaultsOSRD
+preplace inst xlconcat_0 -pg 1 -lvl 5 -x 1540 -y 410 -defaultsOSRD
+preplace inst Channel4 -pg 1 -lvl 6 -x 1970 -y 770 -defaultsOSRD -resize 180 116
+preplace inst Channel1 -pg 1 -lvl 6 -x 1970 -y 630 -defaultsOSRD -resize 180 116
+preplace inst Channel2 -pg 1 -lvl 6 -x 1970 -y 350 -defaultsOSRD -resize 180 116
+preplace inst Channel3 -pg 1 -lvl 6 -x 1970 -y 490 -defaultsOSRD -resize 180 116
+preplace netloc clk_wiz_0_clk_out1 1 1 5 250 230 610 230 950 940 1380 630 1730
+preplace netloc proc_sys_reset_0_peripheral_aresetn 1 2 4 620 270 960 950 1390 620 1750
+preplace netloc mdm_0_Debug_SYS_Rst 1 1 1 N 310
+preplace netloc Project_0_LED_OUT 1 6 1 NJ 630
+preplace netloc Project_1_LED_OUT 1 6 1 NJ 350
+preplace netloc Project_CH3_LED_OUT 1 6 1 NJ 490
+preplace netloc Channel4_LED_OUT 1 6 1 NJ 770
+preplace netloc clk_wiz_0_locked 1 1 1 240 190n
+preplace netloc sys_clock_1 1 0 1 N 190
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 7 20 80 NJ 80 NJ 80 NJ 80 NJ 80 1750J 270 2190
+preplace netloc axi_dma_CH1_mm2s_introut 1 4 1 1330 380n
+preplace netloc axi_dma_CH2_mm2s_introut 1 4 1 1360 210n
+preplace netloc axi_dma_CH3_mm2s_introut 1 4 1 1330 420n
+preplace netloc axi_dma_CH4_mm2s_introut 1 4 1 1360 440n
+preplace netloc xlconcat_0_dout 1 5 1 1710 170n
+preplace netloc axi_dma_CH1_M_AXIS_MM2S 1 4 2 1340 320 1690J
+preplace netloc Interconnect_Register_M02_AXI 1 3 1 930 150n
+preplace netloc axi_dma_1_M_AXI_MM2S 1 4 1 1350 170n
+preplace netloc axi_dma_CH1_M_AXI_MM2S 1 4 1 1340 350n
+preplace netloc axi_memory_init_0_M_AXI 1 4 1 1330 680n
+preplace netloc axi_dma_CH3_M_AXIS_MM2S 1 4 2 NJ 500 1740
+preplace netloc Interconnect_Register_M03_AXI 1 3 1 940 490n
+preplace netloc axi_dma_CH3_M_AXI_MM2S 1 4 1 1320 520n
+preplace netloc axi_dma_CH4_M_AXI_MM2S 1 4 1 1340 780n
+preplace netloc Interconnect_Register_M04_AXI 1 3 1 930 510n
+preplace netloc axi_dma_CH4_M_AXIS_MM2S 1 4 2 1370J 640 1690
+preplace netloc axi_dma_1_M_AXIS_MM2S 1 4 2 NJ 150 1720
+preplace netloc processing_system7_0_DDR 1 6 1 NJ 60
+preplace netloc processing_system7_0_FIXED_IO 1 6 1 NJ 80
+preplace netloc axi_interconnect_0_M00_AXI 1 5 1 1700 110n
+preplace netloc processing_system7_0_M_AXI_GP0 1 2 5 630 90 NJ 90 NJ 90 1740J 260 2200
+preplace netloc Interconnect_Register_M01_AXI 1 3 1 940 330n
+levelinfo -pg 1 0 130 430 780 1140 1540 1970 2220
+pagesize -pg 1 -db -bbox -sgen -120 0 2360 1120
+",
+   "Docu_V2_2_Layout_Default":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port DDR -pg 1 -lvl 6 -x 2060 -y 930 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 6 -x 2060 -y 950 -defaultsOSRD
+preplace port LED_OUT_1 -pg 1 -lvl 6 -x 2060 -y 220 -defaultsOSRD
+preplace port LED_OUT_2 -pg 1 -lvl 6 -x 2060 -y 400 -defaultsOSRD
+preplace port LED_OUT_3 -pg 1 -lvl 6 -x 2060 -y 580 -defaultsOSRD
+preplace port LED_OUT_4 -pg 1 -lvl 6 -x 2060 -y 760 -defaultsOSRD
+preplace port sys_clock -pg 1 -lvl 0 -x -30 -y 570 -defaultsOSRD
+preplace inst axi_memory_init_0 -pg 1 -lvl 2 -x 450 -y 120 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 2 -x 450 -y 780 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 5 -x 1800 -y 1000 -defaultsOSRD
+preplace inst mdm_0 -pg 1 -lvl 1 -x 130 -y 750 -defaultsOSRD
+preplace inst Interconnect_Register -pg 1 -lvl 2 -x 450 -y 430 -defaultsOSRD
+preplace inst axi_dma_CH1 -pg 1 -lvl 3 -x 880 -y 230 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD -resize 320 140
+preplace inst Interconnect_DMA -pg 1 -lvl 4 -x 1360 -y 980 -defaultsOSRD
+preplace inst axi_dma_CH2 -pg 1 -lvl 3 -x 880 -y 410 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD -resize 320 140
+preplace inst axi_dma_CH3 -pg 1 -lvl 3 -x 880 -y 590 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD -resize 320 140
+preplace inst axi_dma_CH4 -pg 1 -lvl 3 -x 880 -y 770 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 39 38 37 40 41} -defaultsOSRD -resize 320 140
+preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 130 -y 560 -defaultsOSRD
+preplace inst Channel4 -pg 1 -lvl 5 -x 1800 -y 760 -defaultsOSRD -resize 180 116
+preplace inst Channel1 -pg 1 -lvl 5 -x 1800 -y 220 -defaultsOSRD -resize 180 116
+preplace inst Channel2 -pg 1 -lvl 5 -x 1800 -y 400 -defaultsOSRD -resize 180 116
+preplace inst Channel3 -pg 1 -lvl 5 -x 1800 -y 580 -defaultsOSRD -resize 180 116
+preplace inst xlconcat_0 -pg 1 -lvl 4 -x 1360 -y 110 -defaultsOSRD
+preplace netloc clk_wiz_0_clk_out1 1 1 4 250 220 650 860 1070 720 1510
+preplace netloc proc_sys_reset_0_peripheral_aresetn 1 1 4 260 230 630 870 1140 730 1520
+preplace netloc mdm_0_Debug_SYS_Rst 1 1 1 N 760
+preplace netloc Project_0_LED_OUT 1 5 1 N 220
+preplace netloc Project_1_LED_OUT 1 5 1 N 400
+preplace netloc Project_CH3_LED_OUT 1 5 1 N 580
+preplace netloc Channel4_LED_OUT 1 5 1 N 760
+preplace netloc clk_wiz_0_locked 1 1 1 240 570n
+preplace netloc sys_clock_1 1 0 1 NJ 570
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 6 -10 20 NJ 20 NJ 20 NJ 20 NJ 20 2010
+preplace netloc axi_dma_CH1_mm2s_introut 1 3 1 1070 80n
+preplace netloc axi_dma_CH2_mm2s_introut 1 3 1 1080 100n
+preplace netloc axi_dma_CH3_mm2s_introut 1 3 1 1090 120n
+preplace netloc axi_dma_CH4_mm2s_introut 1 3 1 1110 140n
+preplace netloc xlconcat_0_dout 1 4 1 1500 110n
+preplace netloc axi_dma_1_M_AXI_MM2S 1 3 1 1100 400n
+preplace netloc axi_dma_0_M_AXIS_MM2S 1 3 2 NJ 200 N
+preplace netloc axi_dma_CH1_M_AXI_MM2S 1 3 1 1120 220n
+preplace netloc axi_memory_init_0_M_AXI 1 2 2 N 110 1130
+preplace netloc axi_dma_CH3_M_AXIS_MM2S 1 3 2 N 560 N
+preplace netloc Interconnect_Register_M03_AXI 1 2 1 640 450n
+preplace netloc axi_dma_CH3_M_AXI_MM2S 1 3 1 1080 580n
+preplace netloc axi_dma_CH4_M_AXI_MM2S 1 3 1 1060 760n
+preplace netloc Interconnect_Register_M04_AXI 1 2 1 620 470n
+preplace netloc axi_dma_CH4_M_AXIS_MM2S 1 3 2 N 740 N
+preplace netloc axi_dma_1_M_AXIS_MM2S 1 3 2 NJ 380 N
+preplace netloc processing_system7_0_DDR 1 5 1 N 930
+preplace netloc processing_system7_0_FIXED_IO 1 5 1 N 950
+preplace netloc axi_interconnect_0_M00_AXI 1 4 1 N 980
+preplace netloc processing_system7_0_M_AXI_GP0 1 1 5 270 680 NJ 680 NJ 680 NJ 680 2000
+preplace netloc Interconnect_Register_M01_AXI 1 2 1 640 200n
+preplace netloc Interconnect_Register_M02_AXI 1 2 1 660 380n
+levelinfo -pg 1 -30 130 450 880 1360 1800 2060
+pagesize -pg 1 -db -bbox -sgen -150 -100 2200 1220
+",
+   "Docu_V2_2_ScaleFactor":"0.476287",
+   "Docu_V2_2_TopLeft":"-115,-50",
+   "ExpandedHierarchyInLayout":"",
+   "No Loops_ScaleFactor":"1.20303",
+   "No Loops_TopLeft":"-611,0",
+   "ProjectDocumentation_DefaultLayers":"",
+   "ProjectDocumentation_DefaultScaleFactor":"0.936525",
+   "ProjectDocumentation_DefaultTopLeft":"-252,-127",
+   "ProjectDocumentation_ExpandedHierarchyInLayout":"",
+   "ProjectDocumentation_Layers":"",
+   "ProjectDocumentation_Layout":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port DDR -pg 1 -lvl 6 -x 2060 -y 930 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 6 -x 2060 -y 950 -defaultsOSRD
+preplace port LED_OUT_1 -pg 1 -lvl 6 -x 2060 -y 220 -defaultsOSRD
+preplace port LED_OUT_2 -pg 1 -lvl 6 -x 2060 -y 400 -defaultsOSRD
+preplace port LED_OUT_3 -pg 1 -lvl 6 -x 2060 -y 580 -defaultsOSRD
+preplace port LED_OUT_4 -pg 1 -lvl 6 -x 2060 -y 760 -defaultsOSRD
+preplace port sys_clock -pg 1 -lvl 0 -x -30 -y 570 -defaultsOSRD
+preplace inst axi_memory_init_0 -pg 1 -lvl 2 -x 450 -y 120 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 2 -x 450 -y 780 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 5 -x 1800 -y 1000 -defaultsOSRD
+preplace inst mdm_0 -pg 1 -lvl 1 -x 130 -y 750 -defaultsOSRD
+preplace inst Interconnect_Register -pg 1 -lvl 2 -x 450 -y 430 -defaultsOSRD
+preplace inst axi_dma_CH1 -pg 1 -lvl 3 -x 880 -y 230 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD -resize 320 140
+preplace inst Interconnect_DMA -pg 1 -lvl 4 -x 1360 -y 980 -defaultsOSRD
+preplace inst axi_dma_CH2 -pg 1 -lvl 3 -x 880 -y 410 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD -resize 320 140
+preplace inst axi_dma_CH3 -pg 1 -lvl 3 -x 880 -y 590 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 37 38 39 40 41} -defaultsOSRD -resize 320 140
+preplace inst axi_dma_CH4 -pg 1 -lvl 3 -x 880 -y 770 -swap {0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 31 18 19 20 21 22 23 24 25 26 27 28 29 30 17 32 33 34 35 36 39 38 37 40 41} -defaultsOSRD -resize 320 140
+preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 130 -y 560 -defaultsOSRD
+preplace inst Channel4 -pg 1 -lvl 5 -x 1800 -y 760 -defaultsOSRD -resize 180 116
+preplace inst Channel1 -pg 1 -lvl 5 -x 1800 -y 220 -defaultsOSRD -resize 180 116
+preplace inst Channel2 -pg 1 -lvl 5 -x 1800 -y 400 -defaultsOSRD -resize 180 116
+preplace inst Channel3 -pg 1 -lvl 5 -x 1800 -y 580 -defaultsOSRD -resize 180 116
+preplace inst xlconcat_0 -pg 1 -lvl 4 -x 1360 -y 110 -defaultsOSRD
+preplace netloc clk_wiz_0_clk_out1 1 1 4 250 220 650 860 1070 720 1510
+preplace netloc proc_sys_reset_0_peripheral_aresetn 1 1 4 260 230 630 870 1140 730 1520
+preplace netloc mdm_0_Debug_SYS_Rst 1 1 1 N 760
+preplace netloc Project_0_LED_OUT 1 5 1 N 220
+preplace netloc Project_1_LED_OUT 1 5 1 N 400
+preplace netloc Project_CH3_LED_OUT 1 5 1 N 580
+preplace netloc Channel4_LED_OUT 1 5 1 N 760
+preplace netloc clk_wiz_0_locked 1 1 1 240 570n
+preplace netloc sys_clock_1 1 0 1 NJ 570
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 6 -10 20 NJ 20 NJ 20 NJ 20 NJ 20 2010
+preplace netloc axi_dma_CH1_mm2s_introut 1 3 1 1070 80n
+preplace netloc axi_dma_CH2_mm2s_introut 1 3 1 1080 100n
+preplace netloc axi_dma_CH3_mm2s_introut 1 3 1 1090 120n
+preplace netloc axi_dma_CH4_mm2s_introut 1 3 1 1110 140n
+preplace netloc xlconcat_0_dout 1 4 1 1500 110n
+preplace netloc axi_dma_1_M_AXI_MM2S 1 3 1 1100 400n
+preplace netloc axi_dma_0_M_AXIS_MM2S 1 3 2 NJ 200 N
+preplace netloc axi_dma_CH1_M_AXI_MM2S 1 3 1 1120 220n
+preplace netloc axi_memory_init_0_M_AXI 1 2 2 N 110 1130
+preplace netloc axi_dma_CH3_M_AXIS_MM2S 1 3 2 N 560 N
+preplace netloc Interconnect_Register_M03_AXI 1 2 1 640 450n
+preplace netloc axi_dma_CH3_M_AXI_MM2S 1 3 1 1080 580n
+preplace netloc axi_dma_CH4_M_AXI_MM2S 1 3 1 1060 760n
+preplace netloc Interconnect_Register_M04_AXI 1 2 1 620 470n
+preplace netloc axi_dma_CH4_M_AXIS_MM2S 1 3 2 N 740 N
+preplace netloc axi_dma_1_M_AXIS_MM2S 1 3 2 NJ 380 N
+preplace netloc processing_system7_0_DDR 1 5 1 N 930
+preplace netloc processing_system7_0_FIXED_IO 1 5 1 N 950
+preplace netloc axi_interconnect_0_M00_AXI 1 4 1 N 980
+preplace netloc processing_system7_0_M_AXI_GP0 1 1 5 270 680 NJ 680 NJ 680 NJ 680 2000
+preplace netloc Interconnect_Register_M01_AXI 1 2 1 640 200n
+preplace netloc Interconnect_Register_M02_AXI 1 2 1 660 380n
+levelinfo -pg 1 -30 130 450 880 1360 1800 2060
+pagesize -pg 1 -db -bbox -sgen -150 -100 2200 1220
+",
+   "ProjectDocumentation_Layout_Default":"# # String gsaved with Nlview 7.0r4  2019-12-20 bk=1.5203 VDI=41 GEI=36 GUI=JA:10.0 TLS
+#  -string -flagsOSRD
+preplace port DDR -pg 1 -lvl 6 -x 2380 -y 770 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 6 -x 2380 -y 790 -defaultsOSRD
+preplace port sys_clock -pg 1 -lvl 0 -x -130 -y 240 -defaultsOSRD
+preplace port reset_rtl -pg 1 -lvl 0 -x -130 -y 220 -defaultsOSRD
+preplace port LED_OUT_1 -pg 1 -lvl 6 -x 2380 -y 100 -defaultsOSRD
+preplace port LED_OUT_2 -pg 1 -lvl 6 -x 2380 -y 260 -defaultsOSRD
+preplace port LED_OUT_3 -pg 1 -lvl 6 -x 2380 -y 410 -defaultsOSRD
+preplace port LED_OUT_4 -pg 1 -lvl 6 -x 2380 -y 570 -defaultsOSRD
+preplace inst axi_intc_0 -pg 1 -lvl 4 -x 1630 -y 60 -defaultsOSRD
+preplace inst axi_memory_init_0 -pg 1 -lvl 3 -x 1150 -y 120 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 2 -x 710 -y 720 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 5 -x 2120 -y 840 -defaultsOSRD
+preplace inst mdm_0 -pg 1 -lvl 1 -x 360 -y 690 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 360 -y 230 -defaultsOSRD
+preplace inst Interconnect_Register -pg 1 -lvl 2 -x 710 -y 290 -defaultsOSRD
+preplace inst axi_dma_CH1 -pg 1 -lvl 3 -x 1150 -y 310 -defaultsOSRD
+preplace inst Interconnect_DMA -pg 1 -lvl 4 -x 1630 -y 850 -defaultsOSRD
+preplace inst Channel1 -pg 1 -lvl 5 -x 2120 -y 100 -defaultsOSRD
+preplace inst Channel2 -pg 1 -lvl 5 -x 2120 -y 260 -defaultsOSRD -resize 180 116
+preplace inst axi_dma_CH2 -pg 1 -lvl 3 -x 1150 -y 470 -defaultsOSRD -resize 320 136
+preplace inst axi_dma_CH3 -pg 1 -lvl 3 -x 1150 -y 630 -defaultsOSRD
+preplace inst Channel3 -pg 1 -lvl 5 -x 2120 -y 410 -defaultsOSRD
+preplace inst Channel4 -pg 1 -lvl 5 -x 2120 -y 570 -defaultsOSRD -resize 180 116
+preplace inst axi_dma_CH4 -pg 1 -lvl 3 -x 1150 -y 800 -defaultsOSRD -resize 320 136
+preplace netloc clk_wiz_0_clk_out1 1 1 4 480 80 910 20 1390 310 1800
+preplace netloc proc_sys_reset_0_peripheral_aresetn 1 1 4 500 90 920 30 1360 320 1820
+preplace netloc clk_wiz_0_locked 1 1 1 470 240n
+preplace netloc sys_clock_1 1 0 1 NJ 240
+preplace netloc reset_rtl_1 1 0 1 NJ 220
+preplace netloc mdm_0_Debug_SYS_Rst 1 1 1 N 700
+preplace netloc Project_0_LED_OUT 1 5 1 N 100
+preplace netloc Project_1_LED_OUT 1 5 1 N 260
+preplace netloc Project_CH3_LED_OUT 1 5 1 N 410
+preplace netloc Channel4_LED_OUT 1 5 1 N 570
+preplace netloc processing_system7_0_DDR 1 5 1 N 770
+preplace netloc processing_system7_0_FIXED_IO 1 5 1 N 790
+preplace netloc axi_interconnect_0_M00_AXI 1 4 1 1780 830n
+preplace netloc processing_system7_0_M_AXI_GP0 1 1 5 490 -30 NJ -30 NJ -30 NJ -30 2340
+preplace netloc Interconnect_Register_M01_AXI 1 2 1 930 270n
+preplace netloc Interconnect_Register_M02_AXI 1 2 1 930 290n
+preplace netloc axi_dma_1_M_AXIS_MM2S 1 3 2 NJ 460 1790
+preplace netloc axi_dma_1_M_AXI_MM2S 1 3 1 1350 440n
+preplace netloc axi_dma_0_M_AXIS_MM2S 1 3 2 NJ 300 1780
+preplace netloc axi_dma_CH1_M_AXI_MM2S 1 3 1 1380 280n
+preplace netloc axi_memory_init_0_M_AXI 1 3 1 1400 110n
+preplace netloc Interconnect_Register_M00_AXI 1 2 2 930 210 1380
+preplace netloc Interconnect_Register_M03_AXI 1 2 1 900 310n
+preplace netloc axi_dma_CH3_M_AXI_MM2S 1 3 1 1330 600n
+preplace netloc axi_dma_CH3_M_AXIS_MM2S 1 3 2 1370 470 1810
+preplace netloc axi_dma_CH4_M_AXI_MM2S 1 3 1 1370 750n
+preplace netloc axi_dma_CH4_M_AXIS_MM2S 1 3 2 1340 550 N
+preplace netloc Interconnect_Register_M04_AXI 1 2 1 890 330n
+levelinfo -pg 1 -130 360 710 1150 1630 2120 2380
+pagesize -pg 1 -db -bbox -sgen -250 -300 2520 1700
+",
+   "ProjectDocumentation_ScaleFactor":"1.63457",
+   "ProjectDocumentation_TopLeft":"-146,8",
+   "guistr":"# # String gsaved with Nlview 7.0r6  2020-01-29 bk=1.5227 VDI=41 GEI=36 GUI=JA:10.0 non-TLS
+#  -string -flagsOSRD
+preplace port DDR -pg 1 -lvl 6 -x 2380 -y 770 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 6 -x 2380 -y 790 -defaultsOSRD
+preplace port LED_OUT_1 -pg 1 -lvl 6 -x 2380 -y 100 -defaultsOSRD
+preplace port LED_OUT_2 -pg 1 -lvl 6 -x 2380 -y 260 -defaultsOSRD
+preplace port LED_OUT_3 -pg 1 -lvl 6 -x 2380 -y 410 -defaultsOSRD
+preplace port LED_OUT_4 -pg 1 -lvl 6 -x 2380 -y 570 -defaultsOSRD
+preplace port sys_clock -pg 1 -lvl 0 -x -130 -y 240 -defaultsOSRD
+preplace inst axi_memory_init_0 -pg 1 -lvl 3 -x 1150 -y 120 -defaultsOSRD
+preplace inst mdm_0 -pg 1 -lvl 1 -x 360 -y 690 -defaultsOSRD
+preplace inst Interconnect_Register -pg 1 -lvl 2 -x 710 -y 290 -defaultsOSRD
+preplace inst axi_dma_CH1 -pg 1 -lvl 3 -x 1150 -y 310 -defaultsOSRD
+preplace inst Interconnect_DMA -pg 1 -lvl 4 -x 1630 -y 870 -defaultsOSRD
+preplace inst axi_dma_CH2 -pg 1 -lvl 3 -x 1150 -y 470 -defaultsOSRD -resize 320 136
+preplace inst axi_dma_CH3 -pg 1 -lvl 3 -x 1150 -y 630 -defaultsOSRD
+preplace inst axi_dma_CH4 -pg 1 -lvl 3 -x 1150 -y 800 -defaultsOSRD -resize 320 136
+preplace inst xlconcat_0 -pg 1 -lvl 4 -x 1630 -y 540 -defaultsOSRD
+preplace inst clk_wiz_0 -pg 1 -lvl 1 -x 360 -y 230 -defaultsOSRD
+preplace inst proc_sys_reset_0 -pg 1 -lvl 2 -x 710 -y 720 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 5 -x 2120 -y 840 -defaultsOSRD
+preplace inst Channel4 -pg 1 -lvl 5 -x 2120 -y 570 -defaultsOSRD -resize 180 116
+preplace inst Channel1 -pg 1 -lvl 5 -x 2120 -y 100 -defaultsOSRD
+preplace inst Channel2 -pg 1 -lvl 5 -x 2120 -y 260 -defaultsOSRD -resize 180 116
+preplace inst Channel3 -pg 1 -lvl 5 -x 2120 -y 410 -defaultsOSRD
+preplace netloc clk_wiz_0_clk_out1 1 1 4 480 80 910 890 1370 1120 1810
+preplace netloc proc_sys_reset_0_peripheral_aresetn 1 1 4 490 90 900 210 1380 630 1790
+preplace netloc mdm_0_Debug_SYS_Rst 1 1 1 N 700
+preplace netloc Project_0_LED_OUT 1 5 1 N 100
+preplace netloc Project_1_LED_OUT 1 5 1 N 260
+preplace netloc Project_CH3_LED_OUT 1 5 1 N 410
+preplace netloc Channel4_LED_OUT 1 5 1 N 570
+preplace netloc clk_wiz_0_locked 1 1 1 470 240n
+preplace netloc sys_clock_1 1 0 1 NJ 240
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 6 -110 490 NJ 490 920J 220 NJ 220 1830J 490 2360
+preplace netloc axi_dma_CH1_mm2s_introut 1 3 1 1410 340n
+preplace netloc axi_dma_CH2_mm2s_introut 1 3 1 1390 500n
+preplace netloc axi_dma_CH3_mm2s_introut 1 3 1 1410 550n
+preplace netloc axi_dma_CH4_mm2s_introut 1 3 1 1360 570n
+preplace netloc xlconcat_0_dout 1 4 1 1780 540n
+preplace netloc axi_dma_CH1_M_AXI_MM2S 1 3 1 1400 280n
+preplace netloc Interconnect_Register_M02_AXI 1 2 1 930 290n
+preplace netloc axi_dma_CH3_M_AXI_MM2S 1 3 1 1330 600n
+preplace netloc axi_dma_CH4_M_AXI_MM2S 1 3 1 N 770
+preplace netloc Interconnect_Register_M01_AXI 1 2 1 930 270n
+preplace netloc axi_memory_init_0_M_AXI 1 3 1 1420 110n
+preplace netloc axi_dma_CH3_M_AXIS_MM2S 1 3 2 1370 440 1820
+preplace netloc Interconnect_Register_M03_AXI 1 2 1 890 310n
+preplace netloc axi_dma_CH1_M_AXIS_MM2S 1 3 2 1330 80 NJ
+preplace netloc axi_dma_1_M_AXI_MM2S 1 3 1 1350 440n
+preplace netloc axi_dma_1_M_AXIS_MM2S 1 3 2 1330J 430 1780
+preplace netloc Interconnect_Register_M04_AXI 1 2 1 880 330n
+preplace netloc processing_system7_0_FIXED_IO 1 5 1 N 790
+preplace netloc processing_system7_0_M_AXI_GP0 1 1 5 500 1110 NJ 1110 NJ 1110 NJ 1110 2350
+preplace netloc axi_interconnect_0_M00_AXI 1 4 1 1830 820n
+preplace netloc axi_dma_CH4_M_AXIS_MM2S 1 3 2 1340 450 1800
+preplace netloc processing_system7_0_DDR 1 5 1 N 770
+levelinfo -pg 1 -130 360 710 1150 1630 2120 2380
+pagesize -pg 1 -db -bbox -sgen -250 -300 2520 1700
+"
+}
+{
+   "da_axi4_cnt":"4",
+   "da_board_cnt":"6",
+   "da_clkrst_cnt":"6",
+   "da_ps7_cnt":"1"
+}

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="12358" location="C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/test8/12358" platform="C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/test8/design_1_wrapper_Ethernet2/export/design_1_wrapper_Ethernet2/design_1_wrapper_Ethernet2.xpfm" platformUID="xilinx:cora-z7-10::0.0(custom)" systemProject="12358_system" sysConfig="design_1_wrapper_Ethernet2" runtime="cpp" cpu="standalone_ps7_cortexa9_0" cpuInstance="ps7_cortexa9_0" os="standalone" mssSignature="82d3a8a9a4d42c41218d5114b8062479">
+  <configuration name="Debug" id="xilinx.gnu.armv7.exe.debug.1765747891">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+    <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <configuration name="Release" id="xilinx.gnu.armv7.exe.release.2115223352" dirty="true">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <template appTemplateName="lwip_echo_server" hasBspSettings="true"/>
+</sdkproject:SdkProject>

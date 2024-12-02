@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="5to3ok" location="C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/test18/5to3ok" platform="C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/test18/design_1_wrapper5to3ok/export/design_1_wrapper5to3ok/design_1_wrapper5to3ok.xpfm" platformUID="xilinx:cora-z7-10::0.0(custom)" systemProject="5to3ok_system" sysConfig="design_1_wrapper5to3ok" runtime="cpp" cpu="standalone_ps7_cortexa9_0" cpuInstance="ps7_cortexa9_0" os="standalone" mssSignature="7f18ad186f533c92fed87bf21e49f16b">
+  <configuration name="Debug" id="xilinx.gnu.armv7.exe.debug.142645333">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+    <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <configuration name="Release" id="xilinx.gnu.armv7.exe.release.1446797606" dirty="true">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <template appTemplateName="empty_application"/>
+</sdkproject:SdkProject>

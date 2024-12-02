@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="Project_SW_system-imgFile" value=""/>
+	<item key="Project_SW_system-offSet" value=""/>
+	<item key="Project_SW_system-initFile" value="/home/gab41928/hsc/Project/Vitis/Project2_SW/export/Project2_SW/sw/Project2_SW/boot/fsbl.elf"/>
+	<item key="Project_SW_system-flashType" value="qspi-x4-single"/>
+	<item key="Project_SW_system-verifyFlash" value="false"/>
+	<item key="Project_SW_system-blankCheck" value="false"/>
+	<item key="Project_SW_system-device" value="Auto Detect"/>
+	<item key="Project_SW_system-target" value="Local"/>
+	<item key="programflash.hwplatform" value="Project_SW_system"/>
+</section>

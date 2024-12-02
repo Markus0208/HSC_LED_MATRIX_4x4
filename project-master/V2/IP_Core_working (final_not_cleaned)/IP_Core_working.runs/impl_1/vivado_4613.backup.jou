@@ -1,0 +1,12 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Wed Jan 17 12:08:03 2024
+# Process ID: 4613
+# Current directory: /home/gab41928/hsc/Project/V2/IP_Core_working/IP_Core_working.runs/impl_1
+# Command line: vivado -log Project.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source Project.tcl -notrace
+# Log file: /home/gab41928/hsc/Project/V2/IP_Core_working/IP_Core_working.runs/impl_1/Project.vdi
+# Journal file: /home/gab41928/hsc/Project/V2/IP_Core_working/IP_Core_working.runs/impl_1/vivado.jou
+#-----------------------------------------------------------
+source Project.tcl -notrace

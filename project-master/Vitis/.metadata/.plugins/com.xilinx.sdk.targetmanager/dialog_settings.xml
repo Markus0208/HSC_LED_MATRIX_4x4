@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item key="Project_SW_system-bitFile" value="/home/gab41928/hsc/Project/V2/Main_Project_V2/Main_Project_V2.runs/impl_1/design_1_wrapper.bit"/>
+	<item key="Project_SW_system-bmmFile" value=""/>
+	<item key="Project_SW_system-target" value="Local"/>
+	<item key="Project_SW_system-device" value="Auto Detect"/>
+	<item key="Project_SW_system-partial_bit" value="false"/>
+	<item key="Project_SW_system-skip_rev_check" value="false"/>
+	<item key="programfpga.sdxproject" value="Project_SW_system"/>
+	<item key="devices_info_Local" value="{&quot;cables&quot;:[{&quot;name&quot;:&quot;Digilent Cora Z7 - 7007S 210370A92FC0A&quot;,&quot;indexContextMap&quot;:{&quot;2&quot;:&quot;jsn-Cora Z7 - 7007S-210370A92FC0A-4ba00477-0&quot;,&quot;3&quot;:&quot;jsn-Cora Z7 - 7007S-210370A92FC0A-13722093-0&quot;}}]}"/>
+</section>

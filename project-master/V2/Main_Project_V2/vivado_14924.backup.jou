@@ -1,0 +1,26 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Wed Nov 20 16:29:06 2024
+# Process ID: 14924
+# Current directory: C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/Main_Project_V2
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent3732 C:\Users\thego\Desktop\021120241015\project-master\project-master\V2\Main_Project_V2\Main_Project_V2.xpr
+# Log file: C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/Main_Project_V2/vivado.log
+# Journal file: C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/Main_Project_V2\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/Main_Project_V2/Main_Project_V2.xpr
+update_compile_order -fileset sources_1
+open_bd_design {C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/Main_Project_V2/Main_Project_V2.srcs/sources_1/bd/design_1/design_1.bd}
+report_ip_status -name ip_status 
+upgrade_ip [get_ips  {design_1_clk_wiz_0_0 design_1_Channel3_0 design_1_Project_0_2 design_1_Project_0_0 design_1_proc_sys_reset_0_0 design_1_processing_system7_0_0 design_1_Project_0_1}] -log ip_upgrade.log
+export_ip_user_files -of_objects [get_ips {design_1_clk_wiz_0_0 design_1_Channel3_0 design_1_Project_0_2 design_1_Project_0_0 design_1_proc_sys_reset_0_0 design_1_processing_system7_0_0 design_1_Project_0_1}] -no_script -sync -force -quiet
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 12
+wait_on_run impl_1
+open_run impl_1
+write_hw_platform -fixed -include_bit -force -file C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/Main_Project_V2/design_1_wrapper5to3.xsa
+open_bd_design {C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/Main_Project_V2/Main_Project_V2.srcs/sources_1/bd/design_1/design_1.bd}
+open_bd_design {C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/Main_Project_V2/Main_Project_V2.srcs/sources_1/bd/design_1/design_1.bd}
+open_bd_design {C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/Main_Project_V2/Main_Project_V2.srcs/sources_1/bd/design_1/design_1.bd}

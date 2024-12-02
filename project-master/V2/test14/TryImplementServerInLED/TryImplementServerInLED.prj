@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="TryImplementServerInLED" location="C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/test14/TryImplementServerInLED" platform="C:/Users/thego/Desktop/021120241015/project-master/project-master/V2/test14/design_1_wrapper_1000_DisRes1/export/design_1_wrapper_1000_DisRes1/design_1_wrapper_1000_DisRes1.xpfm" platformUID="xilinx:cora-z7-10::0.0(custom)" systemProject="TryImplementServerInLED_system" sysConfig="design_1_wrapper_1000_DisRes1" runtime="cpp" cpu="standalone_ps7_cortexa9_0" cpuInstance="ps7_cortexa9_0" os="standalone" mssSignature="7a89339dc2350116914a034ec462a7e5">
+  <configuration name="Debug" id="xilinx.gnu.armv7.exe.debug.237785693">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+    <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <configuration name="Release" id="xilinx.gnu.armv7.exe.release.396420702" dirty="true">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <template appTemplateName="empty_application"/>
+</sdkproject:SdkProject>
