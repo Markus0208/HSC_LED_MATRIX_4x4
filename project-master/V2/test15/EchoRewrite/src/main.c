@@ -1,5 +1,4 @@
 #include "xaxidma.h"
-
 #include "xplatform_info.h"
 #include "xil_exception.h"
 #include "xdebug.h"
@@ -7,97 +6,28 @@
 #include "xscugic.h"
 #include "xscugic_hw.h"
 #include "math.h"
-
 #include <stdio.h>
-
 #include "xparameters.h"
-
 #include "netif/xadapter.h"
-
 #include "echo.h"
-
 #include "platform.h"
 #include "platform_config.h"
-#if defined(__arm__) || defined(__aarch64__)
 #include "xil_printf.h"
-#endif
-
 #include "lwip/tcp.h"
 #include "xil_cache.h"
-
-#if LWIP_IPV6 == 1
-#include "lwip/ip.h"
-#else
-#if LWIP_DHCP == 1
 #include "lwip/dhcp.h"
-#endif
-#endif
 
-/* defined by each RAW mode application */
-void print_app_header();
-int start_application();
-int transfer_data();
-void tcp_fasttmr(void);
-void tcp_slowtmr(void);
 
-/* missing declaration in lwIP */
-void lwip_init();
 
-#if LWIP_IPV6 == 0
-#if LWIP_DHCP == 1
-extern volatile int dhcp_timoutcntr;
-err_t dhcp_start(struct netif *netif);
-#endif
-#endif
 
-extern volatile int TcpFastTmrFlag;
-extern volatile int TcpSlowTmrFlag;
-static struct netif server_netif;
-struct netif *echo_netif;
-
-#if LWIP_IPV6 == 1
-void print_ip6(char *msg, ip_addr_t *ip)
-{
-	print(msg);
-	xil_printf(" %x:%x:%x:%x:%x:%x:%x:%x\n\r",
-			   IP6_ADDR_BLOCK1(&ip->u_addr.ip6),
-			   IP6_ADDR_BLOCK2(&ip->u_addr.ip6),
-			   IP6_ADDR_BLOCK3(&ip->u_addr.ip6),
-			   IP6_ADDR_BLOCK4(&ip->u_addr.ip6),
-			   IP6_ADDR_BLOCK5(&ip->u_addr.ip6),
-			   IP6_ADDR_BLOCK6(&ip->u_addr.ip6),
-			   IP6_ADDR_BLOCK7(&ip->u_addr.ip6),
-			   IP6_ADDR_BLOCK8(&ip->u_addr.ip6));
-}
-#else
-void print_ip(char *msg, ip_addr_t *ip)
-{
-	print(msg);
-	xil_printf("%d.%d.%d.%d\n\r", ip4_addr1(ip), ip4_addr2(ip),
-			   ip4_addr3(ip), ip4_addr4(ip));
-}
-
-void print_ip_settings(ip_addr_t *ip, ip_addr_t *mask, ip_addr_t *gw)
-{
-
-	print_ip("Board IP: ", ip);
-	print_ip("Netmask : ", mask);
-	print_ip("Gateway : ", gw);
-}
-#endif
-
-#if defined(__arm__) && !defined(ARMR5)
+/*#if defined(__arm__) && !defined(ARMR5)
 #if XPAR_GIGE_PCS_PMA_SGMII_CORE_PRESENT == 1 || XPAR_GIGE_PCS_PMA_1000BASEX_CORE_PRESENT == 1
 int ProgramSi5324(void);
 int ProgramSfpPhy(void);
 #endif
 #endif
 
-#ifdef XPS_BOARD_ZCU102
-#ifdef XPAR_XIICPS_0_DEVICE_ID
-int IicPhyReset(void);
-#endif
-#endif
+
 
 /************************** Constant Definitions *****************************/
 #define NUM_CHANNELS 4 // when adapting, also adapt DMA_Instances and TxDoneA and LED_BUFFER_Instances
@@ -152,22 +82,22 @@ void DMA_INIT()
 	// Channel 1
 	XAxiDma_Config *DMA_CH1_cfg = XAxiDma_LookupConfig(XPAR_AXI_DMA_CH1_DEVICE_ID);
 	ST_Result_Cfg = XAxiDma_CfgInitialize(&DMA_CH1_inst, DMA_CH1_cfg);
-	XAxiDma_IntrEnable(&DMA_CH1_inst, XAXIDMA_IRQ_IOC_MASK, XAXIDMA_DMA_TO_DEVICE);
+	//XAxiDma_IntrEnable(&DMA_CH1_inst, XAXIDMA_IRQ_IOC_MASK, XAXIDMA_DMA_TO_DEVICE);
 
 	// Channel 2
 	XAxiDma_Config *DMA_CH2_cfg = XAxiDma_LookupConfig(XPAR_AXI_DMA_CH2_DEVICE_ID);
 	XAxiDma_CfgInitialize(&DMA_CH2_inst, DMA_CH2_cfg);
-	XAxiDma_IntrEnable(&DMA_CH2_inst, XAXIDMA_IRQ_IOC_MASK, XAXIDMA_DMA_TO_DEVICE);
+	//XAxiDma_IntrEnable(&DMA_CH2_inst, XAXIDMA_IRQ_IOC_MASK, XAXIDMA_DMA_TO_DEVICE);
 
 	// Channel 3
 	XAxiDma_Config *DMA_CH3_cfg = XAxiDma_LookupConfig(XPAR_AXI_DMA_CH3_DEVICE_ID);
 	XAxiDma_CfgInitialize(&DMA_CH3_inst, DMA_CH3_cfg);
-	XAxiDma_IntrEnable(&DMA_CH3_inst, XAXIDMA_IRQ_IOC_MASK, XAXIDMA_DMA_TO_DEVICE);
+	//XAxiDma_IntrEnable(&DMA_CH3_inst, XAXIDMA_IRQ_IOC_MASK, XAXIDMA_DMA_TO_DEVICE);
 
 	// Channel 4
 	XAxiDma_Config *DMA_CH4_cfg = XAxiDma_LookupConfig(XPAR_AXI_DMA_CH4_DEVICE_ID);
 	XAxiDma_CfgInitialize(&DMA_CH4_inst, DMA_CH4_cfg);
-	XAxiDma_IntrEnable(&DMA_CH4_inst, XAXIDMA_IRQ_IOC_MASK, XAXIDMA_DMA_TO_DEVICE);
+	//XAxiDma_IntrEnable(&DMA_CH4_inst, XAXIDMA_IRQ_IOC_MASK, XAXIDMA_DMA_TO_DEVICE);
 }
 
 // Function to clear the buffer
@@ -395,7 +325,7 @@ void Update_Channel4(uint32_t* buffer, int channel, int time, uint32_t color) {
     double phase = channel * 2.0 * M_PI / NUM_CHANNELS;
 
 	//calculate some blinky blinky
-    for (int col = 0; col < 16; col++) {
+    for (int col = 0; col < 64; col++) {
         for (int row = 0; row < 16; row++) {
             int i = XYtoSerpentine(col, row);
 
@@ -440,11 +370,9 @@ int main()
 
 
 
-#if LWIP_IPV6 == 0
+/*
 	ip_addr_t ipaddr, netmask, gw;
 
-#endif
-	/* the mac address of the board. this should be unique per board */
 	unsigned char mac_ethernet_address[] =
 		{0x00, 0x0a, 0x35, 0x00, 0x01, 0x02};
 
@@ -456,7 +384,7 @@ int main()
 #endif
 #endif
 
-/* Define this board specific macro in order perform PHY reset on ZCU102 */
+
 #ifdef XPS_BOARD_ZCU102
 	if (IicPhyReset())
 	{
@@ -473,7 +401,7 @@ int main()
 	gw.addr = 0;
 	netmask.addr = 0;
 #else
-	/* initialize IP addresses to be used */
+	// initialize IP addresses to be used
 	IP4_ADDR(&ipaddr, 192, 168, 1, 10);
 	IP4_ADDR(&netmask, 255, 255, 255, 0);
 	IP4_ADDR(&gw, 192, 168, 1, 1);
@@ -484,7 +412,7 @@ int main()
 	lwip_init();
 
 #if (LWIP_IPV6 == 0)
-	/* Add network interface to the netif_list, and set it as default */
+	//Add network interface to the netif_list, and set it as default
 	if (!xemac_add(echo_netif, &ipaddr, &netmask,
 				   &gw, mac_ethernet_address,
 				   PLATFORM_EMAC_BASEADDR))
@@ -493,7 +421,7 @@ int main()
 		return -1;
 	}
 #else
-	/* Add network interface to the netif_list, and set it as default */
+	// Add network interface to the netif_list, and set it as default
 	if (!xemac_add(echo_netif, NULL, NULL, NULL, mac_ethernet_address,
 				   PLATFORM_EMAC_BASEADDR))
 	{
@@ -510,18 +438,15 @@ int main()
 #endif
 	netif_set_default(echo_netif);
 
-	/* now enable interrupts */
+	// now enable interrupts
 	platform_enable_interrupts();
 
-	/* specify that the network if is up */
+	// specify that the network if is up
 	netif_set_up(echo_netif);
 
 #if (LWIP_IPV6 == 0)
 #if (LWIP_DHCP == 1)
-	/* Create a new DHCP client for this interface.
-	 * Note: you must call dhcp_fine_tmr() and dhcp_coarse_tmr() at
-	 * the predefined regular intervals after starting the client.
-	 */
+	/
 	dhcp_start(echo_netif);
 	dhcp_timoutcntr = 24;
 
@@ -548,7 +473,12 @@ int main()
 	print_ip_settings(&ipaddr, &netmask, &gw);
 
 #endif
-	/* start the application (web server, rxtest, txtest, etc..) */
+	*/
+
+	// start the application (web server, rxtest, txtest, etc..)
+	//start_application();
+
+
 
 	 // General Init
 	 int counter = 0;
@@ -560,10 +490,10 @@ int main()
 	 	Clear_Buffer(LED_BUFFER_Instances[i]);
 
 	 	// Reset TxDone Flags
-	 	TxDoneA[i] = 1;
+
 	 }
 
-	start_application();
+
 
 	DMA_INIT();			 // KEIN PROBLEM
 	Xil_DCacheDisable(); // KEIN PROBLEM
@@ -579,7 +509,7 @@ int main()
 					Connect_DMA_Interrupts();
 
 
-	global_payload_len = 0;
+
 	/* receive and process packets */
 	while (1)
 	{
@@ -603,12 +533,12 @@ int main()
 			{
 				// Check if DMA is ready
 
-					// DMA is ready
+
 
 					if (channel == 0)
 					{
 						//display_matrix_dma0(LED_BUFFER_Instances[channel], channel);
-						Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0xFFFFFF);
+						Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0x005000);
 					}
 					if (channel == 1)
 					{
@@ -633,10 +563,10 @@ int main()
 					// XAxiDma_SimpleTransfer(DMA_Instances[channel], (UINTPTR)LED_BUFFER_Instances[channel], BUFFER_SIZE * 4, XAXIDMA_DMA_TO_DEVICE);
 					u32 Transmit_Status = XAxiDma_SimpleTransfer(DMA_Instances[channel], (UINTPTR)LED_BUFFER_Instances[channel], 4 * BUFFER_SIZE, XAXIDMA_DMA_TO_DEVICE);
 
-					for (volatile int i = 0; i < 0xFFFF; i++)
+					for (volatile int i = 0; i < 0xFFFFF; i++)
 						;
 
-					//counter++;
+					counter++;
 
 
 			}//for
@@ -645,8 +575,8 @@ int main()
 
 		xil_printf("While durch");
 
-		xemacif_input(echo_netif);
-		transfer_data();
+		//xemacif_input(echo_netif);
+		//transfer_data();
 	}//while
 
 	/* never reached */
