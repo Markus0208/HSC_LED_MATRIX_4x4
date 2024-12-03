@@ -139,10 +139,10 @@ void DMA_Interrupt_Handler_Ch4(void *CallbackRef);
 volatile int TxDoneA[NUM_CHANNELS] = {0};
 
 /************************** LED Buffer Definitions  ******************************/
-uint32_t LED_BUFFER_CH1[BUFFER_SIZE] __attribute__((aligned(32)));
-uint32_t LED_BUFFER_CH2[BUFFER_SIZE] __attribute__((aligned(32)));
-uint32_t LED_BUFFER_CH3[BUFFER_SIZE] __attribute__((aligned(32)));
-uint32_t LED_BUFFER_CH4[BUFFER_SIZE] __attribute__((aligned(32)));
+uint32_t LED_BUFFER_CH1[BUFFER_SIZE] __attribute__((aligned(32))) __attribute__((section (".noncached_buffer")));
+uint32_t LED_BUFFER_CH2[BUFFER_SIZE] __attribute__((aligned(32))) __attribute__((section (".noncached_buffer")));
+uint32_t LED_BUFFER_CH3[BUFFER_SIZE] __attribute__((aligned(32))) __attribute__((section (".noncached_buffer")));
+uint32_t LED_BUFFER_CH4[BUFFER_SIZE] __attribute__((aligned(32))) __attribute__((section (".noncached_buffer")));
 uint32_t *LED_BUFFER_Instances[NUM_CHANNELS] = {LED_BUFFER_CH1, LED_BUFFER_CH2, LED_BUFFER_CH3, LED_BUFFER_CH4};
 
 /************************** DMA Initialization Function **************************/
@@ -301,7 +301,8 @@ void display_matrix_dma2(uint32_t *buffer, int channel)
 	i = process_matrix_section(buffer, i, 48, 64, 32, 48, 2);
 
 	// DMA-ï¿½bertragung starten
-	Xil_DCacheFlush();
+	//Xil_DCacheFlush();
+	Xil_DCacheFlushRange((UINTPTR)buffer, BUFFER_SIZE * sizeof(uint32_t));
 }
 
 void display_matrix_dma3(uint32_t *buffer, int channel)
@@ -349,7 +350,7 @@ void Connect_DMA_Interrupts()
 	XScuGic_Connect(&intc, XPAR_FABRIC_AXI_DMA_3_MM2S_INTROUT_INTR, (Xil_ExceptionHandler)DMA_Interrupt_Handler_Ch4, &DMA_CH4_inst);
 
 	// set priority and trigger typedef 0x3 rising edge 0x1 high
-	XScuGic_SetPriorityTriggerType(&intc, XPAR_FABRIC_AXI_DMA_0_MM2S_INTROUT_INTR, 0xA0, 0x3);
+	XScuGic_SetPriorityTriggerType(&intc, XPAR_FABRIC_AXI_DMA_0_MM2S_INTROUT_INTR, 0x03, 0x3);
 	// XScuGic_InterruptMaptoCpu(&intc, (u8)XScuGic_GetCPUID(), XPAR_FABRIC_AXI_DMA_0_MM2S_INTROUT_INTR);
 
 	// Enable interrupts for each DMA channel
@@ -367,6 +368,62 @@ void Enable_Interrupts()
 	Xil_ExceptionRegisterHandler(XIL_EXCEPTION_ID_INT, (Xil_ExceptionHandler)XScuGic_InterruptHandler, &intc);
 	Xil_ExceptionEnable(); // calls Xil_ExceptionEnableMask(XIL_EXCEPTION_ID_IRQ_INT);
 }
+
+
+
+
+
+
+
+// Function to convert from xy coordinate to serpentine
+int XYtoSerpentine(int row, int col) {
+    int serpentine = col;
+	// when row is odd then
+	if (row % 2 == 1){
+		// inverse column number
+		serpentine = 15 - col;
+	}
+	// calculate serpentine coordinate
+    return serpentine + row * 16;
+}
+
+
+
+// Function to update a single channel in the buffer
+void Update_Channel4(uint32_t* buffer, int channel, int time, uint32_t color) {
+    double frequency = 0.2;  // Adjust the frequency of the animation
+    double phase = channel * 2.0 * M_PI / NUM_CHANNELS;
+
+	//calculate some blinky blinky
+    for (int col = 0; col < 16; col++) {
+        for (int row = 0; row < 16; row++) {
+            int i = XYtoSerpentine(col, row);
+
+			//get values between 0 and 1
+            //float val1 = sin(frequency * i + phase + 0.1 * time) * 0.5 + 0.5;
+            float value = 1-fabs(sin(frequency * row + phase + 0.1 * time));
+
+			uint32_t b = (uint32_t)(((color >> 0) & 0xFF) * value);
+			uint32_t r = (uint32_t)(((color >> 8) & 0xFF) * value);
+			uint32_t g = (uint32_t)(((color >> 16) & 0xFF) * value);
+
+			// gamma correction
+			b = gamma_lut[b];
+			r = gamma_lut[r];
+			g = gamma_lut[g];
+
+			// update the colors in the buffer for the current LED
+			buffer[i] = (buffer[i] & 0xFF000000) | // Preserve upper 8 bits
+						(b << 16)                | // Blue: bits 16-23
+						(r << 8)                 | // Red: bits 8-15
+						(g << 0); 		           // Green: bits 0-7
+        }
+    }
+	//needed to force DMA to work
+    //Xil_DCacheFlush();
+    Xil_DCacheFlushRange((UINTPTR)buffer, BUFFER_SIZE * sizeof(uint32_t));
+}
+
 
 
 
@@ -526,7 +583,7 @@ int main()
 	/* receive and process packets */
 	while (1)
 	{
-		if (TcpFastTmrFlag)
+		/*if (TcpFastTmrFlag)
 		{
 			tcp_fasttmr();
 			TcpFastTmrFlag = 0;
@@ -535,100 +592,41 @@ int main()
 		{
 			tcp_slowtmr();
 			TcpSlowTmrFlag = 0;
-		}
-
-		if (NEW_DATA_FLAG == 1)
-		{
+		}*/
 
 
-			NEW_DATA_FLAG = 0;
 
-			 uint32_t led_matrix2[64][64] = {};
-			 for (int row = 0; row < 64; row++)
-			 {
-
-			 	for (int col = 0; col < 64; col++)
-			 	{
-			 		// Indexberechnung
-			 		int index = row * 64 + col;
-
-			 		// Sicherstellen, dass der Index innerhalb der Grenzen liegt
-			 		if (index < 4096)
-			 		{
-			 			led_matrix2[row][col] = global_received_array[index];
-			 		}
-			 		else
-			 		{
-			 			led_matrix2[row][col] = 0; // Standardwert, falls Daten fehlen
-			 		}
-			 	}
-			 }
-
-
-			 	 // Fill SubArrays
-			 	for (int row = 0; row < 32; row++)
-			 	{
-			 		for (int col = 0; col < 32; col++)
-			 		{
-			 			led_matrixol[row][col] = led_matrix2[row][col];
-			 		}
-			 	}
-
-			 	for (int row = 0; row < 32; row++)
-			 	{
-			 		for (int col = 0; col < 32; col++)
-			 		{
-			 			led_matrixor[row][col] = led_matrix2[row][col + 32];
-			 		}
-			 	}
-
-			 	for (int row = 0; row < 32; row++)
-			 	{
-			 		for (int col = 0; col < 32; col++)
-			 		{
-			 			led_matrixur[row][col] = led_matrix2[row + 32][col + 32];
-			 		}
-			 	}
-
-			 	for (int row = 0; row < 32; row++)
-			 	{
-			 		for (int col = 0; col < 32; col++)
-			 		{
-			 			led_matrixul[row][col] = led_matrix2[row + 32][col];
-			 		}
-			 	}
 
 
 
 			for (int channel = 0; channel < NUM_CHANNELS; channel++)
 			{
 				// Check if DMA is ready
-				if (TxDoneA[channel] == 1)
-				{
+
 					// DMA is ready
 
 					if (channel == 0)
 					{
-						display_matrix_dma0(LED_BUFFER_Instances[channel], channel);
-						// Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0xFFFFFF);
+						//display_matrix_dma0(LED_BUFFER_Instances[channel], channel);
+						Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0xFFFFFF);
 					}
 					if (channel == 1)
 					{
-						display_matrix_dma1(LED_BUFFER_Instances[channel], channel);
-						// Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0xFF0000);
+						//display_matrix_dma1(LED_BUFFER_Instances[channel], channel);
+						 Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0x500000);
 					}
 					if (channel == 2)
 					{
-						display_matrix_dma2(LED_BUFFER_Instances[channel], channel);
-						// Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0x0000FF);
+						//display_matrix_dma2(LED_BUFFER_Instances[channel], channel);
+						 Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0x000050);
 					}
 					if (channel == 3)
 					{
-						display_matrix_dma3(LED_BUFFER_Instances[channel], channel);
-						// Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0x00FF00);
+						//display_matrix_dma3(LED_BUFFER_Instances[channel], channel);
+						 Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0x005000);
 					}
 
-					TxDoneA[channel] = 0;
+
 
 					// Start DMA transfer
 					// BUFFER SIZE * 4BYTE per LED
@@ -637,11 +635,13 @@ int main()
 
 					for (volatile int i = 0; i < 0xFFFF; i++)
 						;
-				}
+
+					//counter++;
+
 
 			}//for
 
-		}//if Dataflag
+		//if Dataflag
 
 		xil_printf("While durch");
 

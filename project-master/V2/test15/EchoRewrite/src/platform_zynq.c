@@ -203,6 +203,8 @@ void platform_setup_interrupts(void)
 
 
 
+
+
 	/*
 	 * Enable the interrupt for scu timer.
 	 */
