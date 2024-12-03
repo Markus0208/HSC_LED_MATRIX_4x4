@@ -1,33 +1,6 @@
-/*
- * Copyright (C) 2016 - 2019 Xilinx, Inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
- * OF SUCH DAMAGE.
- *
- */
-
 #include <stdio.h>
 #include <string.h>
+#include "echo.h"
 
 #include "lwip/sockets.h"
 #include "netif/xadapter.h"
@@ -36,7 +9,13 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+
 #define THREAD_STACKSIZE 1024
+#define INITIAL_BUFFER_SIZE 4096
+
+uint32_t NEW_DATA_FLAG = 0;
+uint32_t *global_received_array = NULL;
+
 
 u16_t echo_port = 7;
 
@@ -51,38 +30,111 @@ void print_echo_app_header()
 /* thread spawned for each connection */
 void process_echo_request(void *p)
 {
-	int sd = (int)p;
-	int RECV_BUF_SIZE = 2048;
-	char recv_buf[RECV_BUF_SIZE];
-	int n, nwrote;
+    int sd = (int)p;
+    size_t buffer_capacity = INITIAL_BUFFER_SIZE;
+    size_t buffer_size = 0;
+    uint8_t *recv_buffer = malloc(buffer_capacity);
+    uint32_t total_elements_received = 0;
+    uint32_t total_array_size = 0;
+    uint32_t *received_array = NULL;
+    NEW_DATA_FLAG = 0;
+    *global_received_array = NULL;
 
-	while (1) {
-		/* read a max of RECV_BUF_SIZE bytes from socket */
-		if ((n = read(sd, recv_buf, RECV_BUF_SIZE)) < 0) {
-			xil_printf("%s: error reading from socket %d, closing socket\r\n", __FUNCTION__, sd);
-			break;
-		}
+    if (!recv_buffer) {
+        xil_printf("Memory allocation failed for recv_buffer.\n");
+        close(sd);
+        vTaskDelete(NULL);
+        return;
+    }
 
-		/* break if the recved message = "quit" */
-		if (!strncmp(recv_buf, "quit", 4))
-			break;
+    while (1) {
+        int n = recv(sd, recv_buffer + buffer_size, buffer_capacity - buffer_size, 0);
+        if (n <= 0) {
+            xil_printf("Connection closed or error occurred.\n");
+            break;
+        }
+        buffer_size += n;
 
-		/* break if client closed connection */
-		if (n <= 0)
-			break;
+        size_t offset = 0;
+        while (buffer_size - offset >= sizeof(uint32_t)) {
+            uint32_t block_size;
+            memcpy(&block_size, recv_buffer + offset, sizeof(block_size));
+            block_size = ntohl(block_size);
 
-		/* handle request */
-		if ((nwrote = write(sd, recv_buf, n)) < 0) {
-			xil_printf("%s: ERROR responding to client echo request. received = %d, written = %d\r\n",
-					__FUNCTION__, n, nwrote);
-			xil_printf("Closing socket %d\r\n", sd);
-			break;
-		}
-	}
+            if (block_size == 0) {
+                xil_printf("End of transmission.\n");
+                xil_printf("Total elements received: %u\n", total_elements_received);
 
-	/* close connection */
-	close(sd);
-	vTaskDelete(NULL);
+
+                free(global_received_array);
+                                global_received_array = (uint32_t *)malloc(INITIAL_BUFFER_SIZE);
+
+                                    // Check allocation success
+                                if (global_received_array == NULL)
+                                    {
+                                        fprintf(stderr, "Memory allocation failed\n");
+                                        exit(1);
+                                    }
+
+                                memcpy(global_received_array, received_array, total_elements_received * sizeof(uint32_t));
+                                NEW_DATA_FLAG=1;
+
+
+                free(received_array);
+                received_array = NULL;
+                total_elements_received = 0;
+                total_array_size = 0;
+
+                offset += sizeof(block_size);
+                continue;
+            }
+
+            size_t expected_data_size = block_size * sizeof(uint32_t);
+            if (buffer_size - offset < sizeof(uint32_t) + expected_data_size) {
+                break; // Unvollständiger Block, auf mehr Daten warten.
+            }
+
+            if (received_array == NULL) {
+                total_array_size = block_size;
+                received_array = malloc(total_array_size * sizeof(uint32_t));
+                if (!received_array) {
+                    xil_printf("Memory allocation for received_array failed.\n");
+                    break;
+                }
+            } else {
+                uint32_t new_total_size = total_elements_received + block_size;
+                uint32_t *new_array = realloc(received_array, new_total_size * sizeof(uint32_t));
+                if (!new_array) {
+                    xil_printf("Memory reallocation failed.\n");
+                    break;
+                }
+                received_array = new_array;
+                total_array_size = new_total_size;
+            }
+
+            uint32_t *payload_data = (uint32_t *)(recv_buffer + offset + sizeof(uint32_t));
+            for (uint32_t i = 0; i < block_size; i++) {
+                received_array[total_elements_received + i] = payload_data[i];
+            }
+            total_elements_received += block_size;
+
+            xil_printf("Received block of %u elements.\n", block_size);
+            offset += sizeof(uint32_t) + expected_data_size;
+        }
+
+        if (offset < buffer_size) {
+            memmove(recv_buffer, recv_buffer + offset, buffer_size - offset);
+            buffer_size -= offset;
+        } else {
+            buffer_size = 0;
+        }
+    }
+
+    free(recv_buffer);
+    free(received_array);
+
+    close(sd);
+    vTaskDelete(NULL);
 }
 
 void echo_application_thread()
@@ -131,3 +183,112 @@ void echo_application_thread()
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * void process_echo_request(void *p) {
+    int sd = (int)p;
+    size_t buffer_capacity = INITIAL_BUFFER_SIZE;
+    size_t buffer_size = 0;
+    uint8_t *recv_buffer = malloc(buffer_capacity);
+    uint32_t total_elements_received = 0;
+    uint32_t total_array_size = 0;
+    uint32_t *received_array = NULL;
+
+    if (!recv_buffer) {
+        xil_printf("Memory allocation failed for recv_buffer.\n");
+        close(sd);
+        vTaskDelete(NULL);
+        return;
+    }
+
+    while (1) {
+        int n = recv(sd, recv_buffer + buffer_size, buffer_capacity - buffer_size, 0);
+        if (n <= 0) {
+            xil_printf("Connection closed or error occurred.\n");
+            break;
+        }
+        buffer_size += n;
+
+        size_t offset = 0;
+        while (buffer_size - offset >= sizeof(uint32_t)) {
+            uint32_t block_size;
+            memcpy(&block_size, recv_buffer + offset, sizeof(block_size));
+            block_size = ntohl(block_size);
+
+            if (block_size == 0) {
+                xil_printf("End of transmission.\n");
+                xil_printf("Total elements received: %u\n", total_elements_received);
+
+                free(received_array);
+                received_array = NULL;
+                total_elements_received = 0;
+                total_array_size = 0;
+
+                offset += sizeof(block_size);
+                continue;
+            }
+
+            size_t expected_data_size = block_size * sizeof(uint32_t);
+            if (buffer_size - offset < sizeof(uint32_t) + expected_data_size) {
+                break; // Unvollständiger Block, auf mehr Daten warten.
+            }
+
+            if (received_array == NULL) {
+                total_array_size = block_size;
+                received_array = malloc(total_array_size * sizeof(uint32_t));
+                if (!received_array) {
+                    xil_printf("Memory allocation for received_array failed.\n");
+                    break;
+                }
+            } else {
+                uint32_t new_total_size = total_elements_received + block_size;
+                uint32_t *new_array = realloc(received_array, new_total_size * sizeof(uint32_t));
+                if (!new_array) {
+                    xil_printf("Memory reallocation failed.\n");
+                    break;
+                }
+                received_array = new_array;
+                total_array_size = new_total_size;
+            }
+
+            uint32_t *payload_data = (uint32_t *)(recv_buffer + offset + sizeof(uint32_t));
+            for (uint32_t i = 0; i < block_size; i++) {
+                received_array[total_elements_received + i] = payload_data[i];
+            }
+            total_elements_received += block_size;
+
+            xil_printf("Received block of %u elements.\n", block_size);
+            offset += sizeof(uint32_t) + expected_data_size;
+        }
+
+        if (offset < buffer_size) {
+            memmove(recv_buffer, recv_buffer + offset, buffer_size - offset);
+            buffer_size -= offset;
+        } else {
+            buffer_size = 0;
+        }
+    }
+
+    free(recv_buffer);
+    free(received_array);
+    close(sd);
+    vTaskDelete(NULL);
+}
+ */

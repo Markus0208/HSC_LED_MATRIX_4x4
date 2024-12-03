@@ -1,31 +1,3 @@
-/*
- * Copyright (C) 2016 - 2019 Xilinx, Inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- *    this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- *    this list of conditions and the following disclaimer in the documentation
- *    and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
- * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
- * SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
- * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
- * IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
- * OF SUCH DAMAGE.
- *
- */
-
 #include "xaxidma.h"
 
 #include "xplatform_info.h"
@@ -41,6 +13,11 @@
 #include "netif/xadapter.h"
 #include "platform_config.h"
 #include "xil_printf.h"
+#include "echo.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
+
+SemaphoreHandle_t global_data_mutex;
 
 #if LWIP_IPV6==1
 #include "lwip/ip.h"
@@ -58,7 +35,7 @@ int IicPhyReset(void);
 
 int main_thread();
 void print_echo_app_header();
-void echo_application_thread(void *);
+void echo_application_thread(void);
 
 void lwip_init();
 
@@ -232,6 +209,126 @@ int XYtoSerpentine(int row, int col) {
     return serpentine + row * 16;
 }
 
+uint32_t led_matrixol[32][32] = {};
+uint32_t led_matrixor[32][32] = {};
+uint32_t led_matrixur[32][32] = {};
+uint32_t led_matrixul[32][32] = {};
+
+uint32_t Gamma_LUT_Init(int row, int col, int index)
+{
+	uint32_t HexCol = 0;
+
+	if (index == 0)
+	{
+		HexCol = led_matrixol[row][col];
+	}
+	if (index == 1)
+	{
+		HexCol = led_matrixor[row][col];
+	}
+	if (index == 2)
+	{
+		HexCol = led_matrixor[row][col];
+	}
+	if (index == 3)
+	{
+		HexCol = led_matrixur[row][col];
+	}
+
+	uint32_t b = (uint32_t)(((HexCol >> 0) & 0xFF));
+	uint32_t r = (uint32_t)(((HexCol >> 8) & 0xFF));
+	uint32_t g = (uint32_t)(((HexCol >> 16) & 0xFF));
+
+	b = gamma_lut[b];
+	r = gamma_lut[r];
+	g = gamma_lut[g];
+
+	return (HexCol & 0xFF0000000 | (g << 16) | (r << 8) | (b << 0));
+}
+
+int process_matrix_section(uint32_t *buffer, int i, int row_start, int row_end, int col_start, int col_end, int index)
+{
+	for (int row = row_start; row < row_end; row++)
+	{
+		for (int col = col_start; col < col_end; col++)
+		{
+			// Bestimmen der richtigen Spaltenreihenfolge
+			if (row % 2 == 0)
+			{ // Gerade Reihe
+				// Spalte von rechts nach links
+				buffer[i] = Gamma_LUT_Init(row, (15 - col), index); // Umgekehrte Reihenfolge f�r gerade Reihen
+			}
+			else
+			{ // Ungerade Reihe
+				// Spalte von links nach rechts
+				buffer[i] = Gamma_LUT_Init(row, col, index); // Von links nach rechts f�r ungerade Reihen
+			}
+			i++;
+		}
+	}
+	return i;
+}
+
+void display_matrix_dma0(uint32_t *buffer, int channel)
+{
+	int i = 0;
+
+	// Farben von led_matrix in den Buffer konvertieren
+
+	i = process_matrix_section(buffer, i, 0, 16, 0, 16, 0);
+	i = process_matrix_section(buffer, i, 0, 16, 16, 32, 0);
+	i = process_matrix_section(buffer, i, 16, 32, 16, 32, 0);
+	i = process_matrix_section(buffer, i, 16, 32, 0, 16, 0);
+
+	// DMA-�bertragung starten
+	Xil_DCacheFlush();
+}
+
+void display_matrix_dma1(uint32_t *buffer, int channel)
+{
+	int i = 0;
+
+	// Farben von led_matrix in den Buffer konvertieren
+
+	i = process_matrix_section(buffer, i, 0, 16, 32, 48, 1);
+	i = process_matrix_section(buffer, i, 0, 16, 48, 64, 1);
+	i = process_matrix_section(buffer, i, 16, 32, 48, 64, 1);
+	i = process_matrix_section(buffer, i, 16, 32, 32, 48, 1);
+
+	// DMA-�bertragung starten
+	Xil_DCacheFlush();
+}
+
+void display_matrix_dma2(uint32_t *buffer, int channel)
+{
+	int i = 0;
+
+	// Farben von led_matrix in den Buffer konvertieren
+
+	i = process_matrix_section(buffer, i, 32, 48, 32, 48, 2);
+	i = process_matrix_section(buffer, i, 32, 48, 48, 64, 2);
+	i = process_matrix_section(buffer, i, 48, 64, 48, 64, 2);
+	i = process_matrix_section(buffer, i, 48, 64, 32, 48, 2);
+
+	// DMA-�bertragung starten
+	Xil_DCacheFlush();
+}
+
+void display_matrix_dma3(uint32_t *buffer, int channel)
+{
+	int i = 0;
+
+	// Farben von led_matrix in den Buffer konvertieren
+
+	i = process_matrix_section(buffer, i, 32, 48, 0, 16, 3);
+	i = process_matrix_section(buffer, i, 32, 48, 16, 32, 3);
+	i = process_matrix_section(buffer, i, 48, 64, 16, 32, 3);
+	i = process_matrix_section(buffer, i, 48, 64, 0, 16, 3);
+
+	// DMA-�bertragung starten
+	Xil_DCacheFlush();
+}
+
 
 
 int led_thread(){
@@ -252,55 +349,113 @@ int led_thread(){
 	while (1)
 		{
 
-				for (int channel = 0; channel < NUM_CHANNELS; channel++)
+		if (xSemaphoreTake(global_data_mutex, portMAX_DELAY) == pdTRUE) {
+		if (NEW_DATA_FLAG == 1)
 				{
-					// Check if DMA is ready
-
-						// DMA is ready
 
 
+					NEW_DATA_FLAG = 0;
 
-						if (channel == 0)
-						{
+					 uint32_t led_matrix2[64][64] = {};
+					 for (int row = 0; row < 64; row++)
+					 {
 
-							 Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0x00FFF0);
-						}
-						if (channel == 1)
-						{
+					 	for (int col = 0; col < 64; col++)
+					 	{
+					 		// Indexberechnung
+					 		int index = row * 64 + col;
 
-							 Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0xFF0000);
-						}
-						if (channel == 2)
-						{
-
-							 Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0x0000FF);
-						}
-						if (channel == 3)
-						{
-
-							 Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0x00FF00);
-						}
-
-
-						//Xil_ExceptionDisable(); // Xilinx-spezifisch
-
-						// Start DMA transfer
-						u32 Transmit_Status = XAxiDma_SimpleTransfer(DMA_Instances[channel], LED_BUFFER_Instances[channel], 4 * BUFFER_SIZE, XAXIDMA_DMA_TO_DEVICE);
-
-						for (volatile int i = 0; i < 0xFFFF; i++)
-							;
-						//Xil_ExceptionEnable();  // Xilinx-spezifisch
-
-						counter++;
-						xil_printf("call");
-
-
-				}//for
-
-		//	}//if Dataflag
+					 		// Sicherstellen, dass der Index innerhalb der Grenzen liegt
+					 		if (index < 4096)
+					 		{
+					 			led_matrix2[row][col] = global_received_array[index];
+					 		}
+					 		else
+					 		{
+					 			led_matrix2[row][col] = 0; // Standardwert, falls Daten fehlen
+					 		}
+					 	}
+					 }
 
 
 
+					 	 // Fill SubArrays
+					 	for (int row = 0; row < 32; row++)
+					 	{
+					 		for (int col = 0; col < 32; col++)
+					 		{
+					 			led_matrixol[row][col] = led_matrix2[row][col];
+					 		}
+					 	}
+
+					 	for (int row = 0; row < 32; row++)
+					 	{
+					 		for (int col = 0; col < 32; col++)
+					 		{
+					 			led_matrixor[row][col] = led_matrix2[row][col + 32];
+					 		}
+					 	}
+
+					 	for (int row = 0; row < 32; row++)
+					 	{
+					 		for (int col = 0; col < 32; col++)
+					 		{
+					 			led_matrixur[row][col] = led_matrix2[row + 32][col + 32];
+					 		}
+					 	}
+
+					 	for (int row = 0; row < 32; row++)
+					 	{
+					 		for (int col = 0; col < 32; col++)
+					 		{
+					 			led_matrixul[row][col] = led_matrix2[row + 32][col];
+					 		}
+					 	}
+
+
+
+					for (int channel = 0; channel < NUM_CHANNELS; channel++)
+					{
+						// Check if DMA is ready
+
+							// DMA is ready
+
+							if (channel == 0)
+							{
+								display_matrix_dma0(LED_BUFFER_Instances[channel], channel);
+								// Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0xFFFFFF);
+							}
+							if (channel == 1)
+							{
+								display_matrix_dma1(LED_BUFFER_Instances[channel], channel);
+								// Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0xFF0000);
+							}
+							if (channel == 2)
+							{
+								display_matrix_dma2(LED_BUFFER_Instances[channel], channel);
+								// Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0x0000FF);
+							}
+							if (channel == 3)
+							{
+								display_matrix_dma3(LED_BUFFER_Instances[channel], channel);
+								// Update_Channel4(LED_BUFFER_Instances[channel], channel, counter, 0x00FF00);
+							}
+
+
+							// Start DMA transfer
+							// BUFFER SIZE * 4BYTE per LED
+
+							u32 Transmit_Status = XAxiDma_SimpleTransfer(DMA_Instances[channel], (UINTPTR)LED_BUFFER_Instances[channel], 4 * BUFFER_SIZE, XAXIDMA_DMA_TO_DEVICE);
+
+							for (volatile int i = 0; i < 0xFFFF; i++)
+								;
+
+
+					}//for
+
+				}//if Dataflag
+		xSemaphoreGive(global_data_mutex);
+		}
 
 		}//while
 }
@@ -319,6 +474,13 @@ int led_thread(){
 
 int main()
 {
+
+	global_data_mutex = xSemaphoreCreateMutex();
+	if (global_data_mutex == NULL) {
+	    xil_printf("Failed to create mutex.\n");
+	    return -1;
+	}
+
 	sys_thread_new("main_thrd", (void(*)(void*))main_thread, 0,
 	                THREAD_STACKSIZE,
 	                DEFAULT_THREAD_PRIO);
@@ -455,7 +617,7 @@ int main_thread()
 			break;
 		}
 		mscnt += DHCP_FINE_TIMER_MSECS;
-		if (mscnt >= DHCP_COARSE_TIMER_SECS * 2000) {
+		if (mscnt >= DHCP_COARSE_TIMER_SECS * 100) {
 			xil_printf("ERROR: DHCP request timed out\r\n");
 			xil_printf("Configuring default IP of 192.168.1.10\r\n");
 			IP4_ADDR(&(server_netif.ip_addr),  192, 168, 1, 10);
