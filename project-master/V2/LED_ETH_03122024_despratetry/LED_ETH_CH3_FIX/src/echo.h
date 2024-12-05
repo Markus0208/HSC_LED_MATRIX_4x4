@@ -3,11 +3,12 @@
 
 
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
 
+extern SemaphoreHandle_t global_data_mutex;
 
-
-extern uint32_t NEW_DATA_FLAG;
-extern uint32_t *global_received_array;
 
 
 

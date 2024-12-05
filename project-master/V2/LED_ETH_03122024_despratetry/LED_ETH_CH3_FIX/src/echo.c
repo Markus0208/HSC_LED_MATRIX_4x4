@@ -8,13 +8,14 @@
 #include "xil_printf.h"
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
+#include "access_semphr.h"
 
 
-#define THREAD_STACKSIZE 1024
+#define THREAD_STACKSIZE 4024
 #define INITIAL_BUFFER_SIZE 4096
 
-uint32_t NEW_DATA_FLAG = 0;
-uint32_t *global_received_array = NULL;
+
 
 
 u16_t echo_port = 7;
@@ -37,8 +38,9 @@ void process_echo_request(void *p)
     uint32_t total_elements_received = 0;
     uint32_t total_array_size = 0;
     uint32_t *received_array = NULL;
-    NEW_DATA_FLAG = 0;
-    *global_received_array = NULL;
+    uint32_t new_total_size = 0;
+
+
 
     if (!recv_buffer) {
         xil_printf("Memory allocation failed for recv_buffer.\n");
@@ -51,6 +53,7 @@ void process_echo_request(void *p)
         int n = recv(sd, recv_buffer + buffer_size, buffer_capacity - buffer_size, 0);
         if (n <= 0) {
             xil_printf("Connection closed or error occurred.\n");
+            xil_printf("\n----------------------------------------\n");
             break;
         }
         buffer_size += n;
@@ -62,36 +65,39 @@ void process_echo_request(void *p)
             block_size = ntohl(block_size);
 
             if (block_size == 0) {
-                xil_printf("End of transmission.\n");
-                xil_printf("Total elements received: %u\n", total_elements_received);
+                           xil_printf("End of transmission.\n");
+                           xil_printf("Total elements received: %u\n", total_elements_received);
 
 
-                free(global_received_array);
-                                global_received_array = (uint32_t *)malloc(INITIAL_BUFFER_SIZE);
-
-                                    // Check allocation success
-                                if (global_received_array == NULL)
-                                    {
-                                        fprintf(stderr, "Memory allocation failed\n");
-                                        exit(1);
-                                    }
-
-                                memcpy(global_received_array, received_array, total_elements_received * sizeof(uint32_t));
-                                NEW_DATA_FLAG=1;
+                           if (xSemaphoreTake(ptr_binary_semphr, portMAX_DELAY) == pdTRUE){
 
 
-                free(received_array);
-                received_array = NULL;
-                total_elements_received = 0;
-                total_array_size = 0;
+                           	memcpy(global_received_array, received_array, total_elements_received * sizeof(uint32_t));
+                           	NEW_DATA_FLAG = 1;
 
-                offset += sizeof(block_size);
-                continue;
-            }
+                           	xSemaphoreGive(ptr_binary_semphr);
+
+                           }
+
+                           free(received_array);
+                           received_array = NULL;
+                           total_elements_received = 0;
+                           total_array_size = 0;
+                           block_size = 0;
+                           offset += sizeof(block_size);
+                           offset = 0;
+                           buffer_size = 0;
+                           free(recv_buffer);
+                           recv_buffer = NULL;
+
+                           close(sd);
+                           vTaskDelete(NULL);
+                       }
+
 
             size_t expected_data_size = block_size * sizeof(uint32_t);
             if (buffer_size - offset < sizeof(uint32_t) + expected_data_size) {
-                break; // Unvollständiger Block, auf mehr Daten warten.
+                break; // Unvollstï¿½ndiger Block, auf mehr Daten warten.
             }
 
             if (received_array == NULL) {
@@ -102,13 +108,14 @@ void process_echo_request(void *p)
                     break;
                 }
             } else {
-                uint32_t new_total_size = total_elements_received + block_size;
+                new_total_size = total_elements_received + block_size;
                 uint32_t *new_array = realloc(received_array, new_total_size * sizeof(uint32_t));
                 if (!new_array) {
                     xil_printf("Memory reallocation failed.\n");
                     break;
                 }
                 received_array = new_array;
+
                 total_array_size = new_total_size;
             }
 
@@ -247,7 +254,7 @@ void echo_application_thread()
 
             size_t expected_data_size = block_size * sizeof(uint32_t);
             if (buffer_size - offset < sizeof(uint32_t) + expected_data_size) {
-                break; // Unvollständiger Block, auf mehr Daten warten.
+                break; // Unvollstï¿½ndiger Block, auf mehr Daten warten.
             }
 
             if (received_array == NULL) {
