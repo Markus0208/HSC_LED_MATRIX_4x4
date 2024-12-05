@@ -23,5 +23,6 @@ void initSemphr(void){
 	if (ptr_binary_semphr == NULL){
 		xil_printf("ALLLAAARMMM");
 	}
-	xil_printf("ALLLAAARM");
+	xSemaphoreGive(ptr_binary_semphr);
+
 }

@@ -76,9 +76,9 @@ print_ip_settings(ip_addr_t *ip, ip_addr_t *mask, ip_addr_t *gw)
 */
 int main()
 {
-	xil_printf("bevor sem");
+
 	initSemphr();
-	xil_printf("after sem");
+
 	sys_thread_new("main_thrd", (void(*)(void*))main_thread, 0,
 	                THREAD_STACKSIZE,
 	                DEFAULT_THREAD_PRIO);

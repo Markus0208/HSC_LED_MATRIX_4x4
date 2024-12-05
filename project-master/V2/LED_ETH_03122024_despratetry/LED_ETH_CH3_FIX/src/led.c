@@ -19,8 +19,9 @@
 #define MATRIX_SIZE 64
 #define DMA_TRANSFER_SIZE (BUFFER_SIZE * sizeof(uint32_t))
 
-uint32_t local64buffer [64][64] ={};
+uint32_t local64buffer [4096] ={};
 uint32_t local_flag = 0;
+uint32_t led_matrix2[64][64] = {};
 
 // Static variables for the interrupt controller
 XScuGic intc;
@@ -294,28 +295,36 @@ int led_thread(){
 			local_flag=NEW_DATA_FLAG;
 			if (local_flag == 1){
 
+				if (local64buffer == NULL) {
+				    xil_printf("local64buffer is NULL\n");
+				    return;  // Fehlerbehandlung oder Rückgabe
+				}
+
+				if (global_received_array == NULL) {
+				    xil_printf("global_received_array is NULL\n");
+				    return;  // Fehlerbehandlung oder Rückgabe
+				}
+				xil_printf("bevor memcpy");
 				memcpy(local64buffer, global_received_array, 4096 * sizeof(uint32_t));
+				xil_printf("after memcpy");
 				NEW_DATA_FLAG = 0;
-				xSemaphoreGive(ptr_binary_semphr);
 
-			}
-			else{
 
-				xSemaphoreGive(ptr_binary_semphr);
-
-				//for(int i = 0; i < 0xFFFFF; i++)
-					//;
 			}
 
 
+			xSemaphoreGive(ptr_binary_semphr);
 
 
 		}
 
 
-			if (local_flag == 1) {
+		//xil_printf("bevore if");
 
-				uint32_t led_matrix2[64][64] = {0};
+			if (local_flag == 1) {
+				xil_printf("In if ");
+				local_flag=0;
+
 				for (int row = 0; row < 64; row++)
 				{
 					for (int col = 0; col < 64; col++)
@@ -326,7 +335,7 @@ int led_thread(){
 						// Sicherstellen, dass der Index innerhalb der Grenzen liegt
 						if (index < 4096)
 						{
-							led_matrix2[row][col] = global_received_array[index];
+							led_matrix2[row][col] = local64buffer[index];
 						}
 						else
 						{
@@ -334,7 +343,7 @@ int led_thread(){
 						}
 					}
 				}
-
+				xil_printf("fill sub arrays ");
 				// Fill SubArrays
 				for (int row = 0; row < 32; row++)
 				{
@@ -395,4 +404,6 @@ int led_thread(){
 				}
 			}
 		}
+	vTaskDelete(NULL);
+	    return 0;
 	}
