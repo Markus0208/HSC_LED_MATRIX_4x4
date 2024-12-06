@@ -1,15 +1,17 @@
+﻿from random import choice
 from PIL import Image
 import csv
 import socket
 import struct
 import numpy as np
+import os
 
 def resize_image(input_path, output_path, new_width, new_height):
     
     try:
         # Bild oeffnen
         with Image.open(input_path) as img:
-            # Bild skalieren mit LANCZOS-Filter f�r hohe Qualit�t
+            # Bild skalieren mit LANCZOS-Filter für hohe Qualität
             resized_img = img.resize((new_width, new_height), Image.LANCZOS)
             # Bild speichern
             resized_img.save(output_path)
@@ -102,63 +104,72 @@ def array_to_image(array, output_file="output_image.png"):
             image.putpixel((x, y), (red, green, blue))
     image.save(output_file)
 
+def clear_screen():
+    # Überprüfen Sie das Betriebssystem und führen Sie den entsprechenden Befehl aus
+    if os.name == 'nt':  # Für Windows
+        os.system('cls')
+    else:  # Für Unix/Linux/Mac
+        os.system('clear')
 
 
 
+def main():
+    server_ip = "192.168.1.10"
+    server_port = 7
+    clear_screen()
+    
+
+    while True:
+        print("Bild waehlen:")
+        print("1. Pickachu")
+        print("2. Evoli")
+        print("3. Relaxo")
+        print("4. Frau")
+        print("5. Frau rothaarig")
+        print("6. Schwert")
+        print("7. Vogel")
+        print("8. Mario")
+
+        choice = input("Waehle das Bild: ")
+        if choice == "1":
+            input_image = "pickachu.png"
+        elif choice == "2":
+            input_image = "evoli.png"
+        elif choice == "3":
+            input_image = "relaxo.jpg"
+        elif choice == "4":
+            input_image = "frau.webp"
+        elif choice == "5":
+            input_image = "frau_rothaarig.png"
+        elif choice == "6":
+            input_image = "schwert.jpg"
+        elif choice == "7":
+            input_image = "vogel.png"
+        elif choice == "8":
+            input_image = "mario.png"
+        else:
+            print("Ungueltige Eingabe. Bitte waehle eine Zahl von 1 bis 8.")
 
 
-server_ip = "192.168.1.10"
-server_port = 7
-
-# Beispielaufruf der Funktion
-resize_image("eingabe2.PNG", "ausgabe.png", 64, 64)
-
-
-output_csv_path = "pixelwerte.csv"
-pixel_array = image_to_pixel_array("ausgabe.png", output_csv_path)
-array_to_image(pixel_array, "output_image.png")
-if pixel_array:
-    if pixel_array:  
-       # Ausgabe des gesamten 2D-Arrays  
-       for row in pixel_array:  
-           print(row)
-    # Ausgabe der ersten Zeile des Arrays zur Kontrolle
-   # print(pixel_array[0])
-#send_array_to_server(server_ip, server_port, pixel_array)
-send_large_array_to_server(server_ip, server_port, pixel_array)
+        # Beispielaufruf der Funktion
+        resize_image(input_image, "ausgabe.png", 64, 64)
+        output_csv_path = "pixelwerte.csv"
+        pixel_array = image_to_pixel_array("ausgabe.png", output_csv_path)
+        array_to_image(pixel_array, "output_image.png")
+        
+        
+        # if pixel_array:
+        #     if pixel_array:  
+        #     # Ausgabe des gesamten 2D-Arrays  
+        #         for row in pixel_array:  
+        #             print(row)
+            
+        send_large_array_to_server(server_ip, server_port, pixel_array)
+        # Überprüfen Sie das Betriebssystem und führen Sie den entsprechenden Befehl aus
+        
+       
+        
    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+if __name__ == "__main__":
+    main()
 

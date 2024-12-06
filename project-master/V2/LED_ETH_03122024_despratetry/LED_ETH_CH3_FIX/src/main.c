@@ -71,6 +71,14 @@ print_ip_settings(ip_addr_t *ip, ip_addr_t *mask, ip_addr_t *gw)
 	print_ip("Netmask : ", mask);
 	print_ip("Gateway : ", gw);
 }
+
+void baby_thread(){
+	while(1){
+	xil_printf("c");
+	}
+	return;
+}
+
 /*
  ************************ main *************************
 */
@@ -82,13 +90,17 @@ int main()
 	sys_thread_new("main_thrd", (void(*)(void*))main_thread, 0,
 	                THREAD_STACKSIZE,
 	                DEFAULT_THREAD_PRIO);
-	sys_thread_new("led_thrd", (void(*)(void*))led_thread, 0,
-		               THREAD_STACKSIZE,
-		               DEFAULT_THREAD_PRIO);
+	//sys_thread_new("led_thrd", (void(*)(void*))led_thread, 0,
+		//               THREAD_STACKSIZE,
+		  //             DEFAULT_THREAD_PRIO);
+	//xTaskCreate(baby_thread, "bbythr", THREAD_STACKSIZE, 0, DEFAULT_THREAD_PRIO, 0);
 	vTaskStartScheduler();
 	while(1);
 	return 0;
 }
+
+
+
 
 void network_thread(void *p)
 {

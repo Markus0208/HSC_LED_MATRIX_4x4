@@ -51,6 +51,7 @@ uint32_t led_matrixol[32][32] = {};
 uint32_t led_matrixor[32][32] = {};
 uint32_t led_matrixur[32][32] = {};
 uint32_t led_matrixul[32][32] = {};
+UBaseType_t task_count = 0;
 
 
 
@@ -126,11 +127,11 @@ uint32_t Gamma_LUT_Init(int row, int col, int index)
 	}
 	if (index == 2)
 	{
-		HexCol = led_matrixor[row][col];
+		HexCol = led_matrixur[row][col];
 	}
 	if (index == 3)
 	{
-		HexCol = led_matrixur[row][col];
+		HexCol = led_matrixul[row][col];
 	}
 
 	uint32_t b = (uint32_t)(((HexCol >> 0) & 0xFF));
@@ -167,71 +168,93 @@ int process_matrix_section(uint32_t *buffer, int i, int row_start, int row_end, 
 	return i;
 }
 
-void display_matrix_dma0(uint32_t *buffer, int channel)
+void display_matrix_dma(uint32_t *buffer, int channel)
 {
 	int i = 0;
 
 	// Farben von led_matrix in den Buffer konvertieren
 
-	i = process_matrix_section(buffer, i, 0, 16, 0, 16, 0);
-	i = process_matrix_section(buffer, i, 0, 16, 16, 32, 0);
-	i = process_matrix_section(buffer, i, 16, 32, 16, 32, 0);
-	i = process_matrix_section(buffer, i, 16, 32, 0, 16, 0);
+	i = process_matrix_section(buffer, i, 0, 16, 0, 16, channel);
+	i = process_matrix_section(buffer, i, 0, 16, 16, 32, channel);
+	i = process_matrix_section(buffer, i, 16, 32, 16, 32, channel);
+	i = process_matrix_section(buffer, i, 16, 32, 0, 16, channel);
 
 	// DMA-ï¿½bertragung starten
 	Xil_DCacheFlush();
 }
 
-void display_matrix_dma1(uint32_t *buffer, int channel)
-{
-	int i = 0;
 
-	// Farben von led_matrix in den Buffer konvertieren
+void Fill_Sub_Arrays(){
+	for (int row = 0; row < 32; row++)
+					{
+						for (int col = 0; col < 32; col++)
+						{
+							led_matrixol[row][col] = led_matrix2[row][col];
+						}
+					}
 
-	i = process_matrix_section(buffer, i, 0, 16, 32, 48, 1);
-	i = process_matrix_section(buffer, i, 0, 16, 48, 64, 1);
-	i = process_matrix_section(buffer, i, 16, 32, 48, 64, 1);
-	i = process_matrix_section(buffer, i, 16, 32, 32, 48, 1);
+					for (int row = 0; row < 32; row++)
+					{
+						for (int col = 0; col < 32; col++)
+						{
+							led_matrixor[row][col] = led_matrix2[row][col + 32];
+						}
+					}
 
-	// DMA-ï¿½bertragung starten
-	Xil_DCacheFlush();
+					for (int row = 0; row < 32; row++)
+					{
+						for (int col = 0; col < 32; col++)
+						{
+							led_matrixur[row][col] = led_matrix2[row + 32][col + 32];
+						}
+					}
+
+					for (int row = 0; row < 32; row++)
+					{
+						for (int col = 0; col < 32; col++)
+						{
+							led_matrixul[row][col] = led_matrix2[row + 32][col];
+						}
+					}
+					return;
 }
 
-void display_matrix_dma2(uint32_t *buffer, int channel)
-{
-	int i = 0;
+void print_active_tasks() {
+    // Puffer für die Task-Statusinformationen
+    TaskStatus_t taskStatusArray[20]; // Array für maximal 10 Tasks
+    UBaseType_t taskCount;
+    char buffer[128]; // Puffer für die Debug-Ausgabe
 
-	// Farben von led_matrix in den Buffer konvertieren
+    // Anzahl der Tasks im System abrufen
+    taskCount = uxTaskGetNumberOfTasks();
 
-	i = process_matrix_section(buffer, i, 32, 48, 32, 48, 2);
-	i = process_matrix_section(buffer, i, 32, 48, 48, 64, 2);
-	i = process_matrix_section(buffer, i, 48, 64, 48, 64, 2);
-	i = process_matrix_section(buffer, i, 48, 64, 32, 48, 2);
+    // Speicher für alle Tasks allokieren
+    TaskStatus_t *taskStatusArrayDynamic = pvPortMalloc(taskCount * sizeof(TaskStatus_t));
 
-	// DMA-ï¿½bertragung starten
-	Xil_DCacheFlush();
-}
+    if (taskStatusArrayDynamic == NULL) {
+        xil_printf("Fehler: Nicht genug Speicher für Task-Daten\n");
+        return;
+    }
 
-void display_matrix_dma3(uint32_t *buffer, int channel)
-{
-	int i = 0;
+    // Systemstatus abrufen
+    UBaseType_t actualTaskCount = uxTaskGetSystemState(taskStatusArrayDynamic, taskCount, NULL);
 
-	// Farben von led_matrix in den Buffer konvertieren
+    xil_printf("Aktive Tasks im System:\n");
+    for (UBaseType_t i = 0; i < actualTaskCount; i++) {
+        // Task-Name ausgeben
+        sprintf(buffer, "Task Name: %s\n", taskStatusArrayDynamic[i].pcTaskName);
+        xil_printf("%s", buffer);
+    }
 
-	i = process_matrix_section(buffer, i, 32, 48, 0, 16, 3);
-	i = process_matrix_section(buffer, i, 32, 48, 16, 32, 3);
-	i = process_matrix_section(buffer, i, 48, 64, 16, 32, 3);
-	i = process_matrix_section(buffer, i, 48, 64, 0, 16, 3);
-
-	// DMA-ï¿½bertragung starten
-	Xil_DCacheFlush();
+    // Speicher freigeben
+    vPortFree(taskStatusArrayDynamic);
 }
 
 
 
 int led_thread(){
 
-	 // General Init
+		// General Init
 		 int counter = 0;
 
 		 for (int i = 0; i < NUM_CHANNELS; i++)
@@ -244,8 +267,8 @@ int led_thread(){
 
 		xil_printf("--------------");
 
-	while (1)
-		{
+	//while (1)
+		//{
 
 		if (xSemaphoreTake(ptr_binary_semphr, portMAX_DELAY) == pdTRUE){
 			local_flag=NEW_DATA_FLAG;
@@ -264,23 +287,21 @@ int led_thread(){
 				memcpy(local64buffer, global_received_array, 4096 * sizeof(uint32_t));
 				xil_printf("after memcpy");
 				NEW_DATA_FLAG = 0;
-
-
 			}
-
-
 			xSemaphoreGive(ptr_binary_semphr);
-
-
 		}
+
+
+
 
 
 		//xil_printf("bevore if");
 
 			if (local_flag == 1) {
-				xil_printf("Free heap size: %u\n", xPortGetFreeHeapSize());
-				UBaseType_t task_count = uxTaskGetNumberOfTasks();
-				xil_printf("Aktive Tasks: %u\n", task_count);
+print_active_tasks();
+						xil_printf("Free heap size: %u\n", xPortGetFreeHeapSize());
+						task_count = uxTaskGetNumberOfTasks();
+						xil_printf("Aktive Tasks: %u\n", task_count);
 
 				xil_printf("In if ");
 				local_flag=0;
@@ -305,65 +326,23 @@ int led_thread(){
 				}
 				xil_printf("fill sub arrays ");
 				// Fill SubArrays
-				for (int row = 0; row < 32; row++)
-				{
-					for (int col = 0; col < 32; col++)
-					{
-						led_matrixol[row][col] = led_matrix2[row][col];
-					}
-				}
 
-				for (int row = 0; row < 32; row++)
-				{
-					for (int col = 0; col < 32; col++)
-					{
-						led_matrixor[row][col] = led_matrix2[row][col + 32];
-					}
-				}
-
-				for (int row = 0; row < 32; row++)
-				{
-					for (int col = 0; col < 32; col++)
-					{
-						led_matrixur[row][col] = led_matrix2[row + 32][col + 32];
-					}
-				}
-
-				for (int row = 0; row < 32; row++)
-				{
-					for (int col = 0; col < 32; col++)
-					{
-						led_matrixul[row][col] = led_matrix2[row + 32][col];
-					}
-				}
+				Fill_Sub_Arrays();
 
 				for (int channel = 0; channel < NUM_CHANNELS; channel++)
 				{
-					if (channel == 0)
-					{
-						display_matrix_dma0(LED_BUFFER_Instances[channel], channel);
-					}
-					if (channel == 1)
-					{
-						display_matrix_dma1(LED_BUFFER_Instances[channel], channel);
-					}
-					if (channel == 2)
-					{
-						display_matrix_dma2(LED_BUFFER_Instances[channel], channel);
-					}
-					if (channel == 3)
-					{
-						display_matrix_dma3(LED_BUFFER_Instances[channel], channel);
-					}
+
+					display_matrix_dma(LED_BUFFER_Instances[channel], channel);
 
 					// Start DMA transfer
+
 					u32 Transmit_Status = XAxiDma_SimpleTransfer(DMA_Instances[channel], (UINTPTR)LED_BUFFER_Instances[channel], 4 * BUFFER_SIZE, XAXIDMA_DMA_TO_DEVICE);
 
 					for (volatile int i = 0; i < 0xFFFF; i++)
 						;
 				}
 			}
-		}
-	vTaskDelete(NULL);
+		//}
+	//vTaskDelete(NULL);
 	    return 0;
 	}

@@ -24,3 +24,4 @@ platform generate -domains freertos10_xilinx_ps7_cortexa9_0
 platform generate -domains freertos10_xilinx_ps7_cortexa9_0 
 platform generate -domains freertos10_xilinx_ps7_cortexa9_0 
 platform generate -domains freertos10_xilinx_ps7_cortexa9_0 
+platform generate -domains freertos10_xilinx_ps7_cortexa9_0,zynq_fsbl 

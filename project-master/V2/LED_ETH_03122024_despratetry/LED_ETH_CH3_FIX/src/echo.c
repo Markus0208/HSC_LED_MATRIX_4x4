@@ -10,11 +10,13 @@
 #include "task.h"
 #include "semphr.h"
 #include "access_semphr.h"
+#include "led.h"
 
-#define THREAD_STACKSIZE 256
+#define THREAD_STACKSIZE 1024//256
 #define INITIAL_BUFFER_SIZE 4096
 
 u16_t echo_port = 7;
+UBaseType_t task_count2 = 0;
 
 void print_echo_app_header()
 {
@@ -29,7 +31,6 @@ void process_echo_request(void *p)
     int sd = (int)p;
     size_t buffer_capacity = INITIAL_BUFFER_SIZE;
     size_t buffer_size = 0;
-    //uint8_t *recv_buffer = malloc(4096);
     uint32_t total_elements_received = 0;
 
     if (!recv_buffer)
@@ -64,43 +65,30 @@ void process_echo_request(void *p)
                 xil_printf("End of transmission.\n");
                 xil_printf("Total elements received: %u\n", total_elements_received);
 
-                //free(recv_buffer);
-				//xil_printf("free recvbuffer ");
-				//recv_buffer = NULL;
-				//xil_printf("recvbuffer = null ");
-
                 xil_printf("bevor sem echo ");
-                if (xSemaphoreTake(ptr_binary_semphr, portMAX_DELAY) == pdTRUE)
-                {
-                    xil_printf("in sem echo ");
-
-                    //memcpy(global_received_array, received_array, total_elements_received * sizeof(uint32_t));
+                if (xSemaphoreTake(ptr_binary_semphr, portMAX_DELAY) == pdTRUE) {
                     NEW_DATA_FLAG = 1;
-
-                    xil_printf("sem given echo ");
+                    // Schreibe sicher in global_received_array
                     xSemaphoreGive(ptr_binary_semphr);
+                } else {
+                    xil_printf("Semaphore could not be taken.\n");
                 }
-                else{xil_printf("Sem not given");}
 
+                xil_printf("Free heap size: %u\n", xPortGetFreeHeapSize());
+                						task_count2 = uxTaskGetNumberOfTasks();
+                						xil_printf("Aktive Tasks: %u\n", task_count2);
 
+                						led_thread();
 
-                total_elements_received = 0;
 
                 block_size = 0;
                 offset += sizeof(block_size);
 
-                offset = 0;
-                buffer_size = 0;
-
-
-
-
-                close(sd);
 
                 xil_printf("bevore taskdelete");
-                vTaskDelete(NULL);
-                xil_printf("task gel�scht");
-                return;
+                break;
+                xil_printf("task deleted");
+
             }
 
             size_t expected_data_size = block_size * sizeof(uint32_t);
