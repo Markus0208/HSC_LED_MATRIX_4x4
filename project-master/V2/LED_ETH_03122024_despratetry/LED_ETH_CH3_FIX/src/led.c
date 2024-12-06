@@ -288,6 +288,8 @@ int led_thread(){
 		DMA_INIT();
 		Xil_DCacheDisable();
 
+		xil_printf("--------------");
+
 	while (1)
 		{
 
@@ -322,6 +324,10 @@ int led_thread(){
 		//xil_printf("bevore if");
 
 			if (local_flag == 1) {
+				xil_printf("Free heap size: %u\n", xPortGetFreeHeapSize());
+				UBaseType_t task_count = uxTaskGetNumberOfTasks();
+				xil_printf("Aktive Tasks: %u\n", task_count);
+
 				xil_printf("In if ");
 				local_flag=0;
 

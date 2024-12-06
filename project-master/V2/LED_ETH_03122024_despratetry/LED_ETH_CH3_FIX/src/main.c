@@ -47,7 +47,7 @@ err_t dhcp_start(struct netif *netif);
 #endif
 #endif
 
-#define THREAD_STACKSIZE 1024
+#define THREAD_STACKSIZE 512
 
 
 
