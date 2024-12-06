@@ -47,6 +47,13 @@ uint32_t LED_BUFFER_CH4[BUFFER_SIZE] __attribute__((aligned(32)));
 uint32_t *LED_BUFFER_Instances[NUM_CHANNELS] = {LED_BUFFER_CH1, LED_BUFFER_CH2, LED_BUFFER_CH3, LED_BUFFER_CH4};
 
 
+uint32_t led_matrixol[32][32] = {};
+uint32_t led_matrixor[32][32] = {};
+uint32_t led_matrixur[32][32] = {};
+uint32_t led_matrixul[32][32] = {};
+
+
+
 /************************** DMA Initialization Function **************************/
 // Function to initialize and configure four DMA channels and enable IRQ interrupts
 void DMA_INIT()
@@ -104,59 +111,6 @@ const uint16_t gamma_lut[256] = {
    227, 229, 231, 232, 234, 236, 238, 240, 242, 244, 246, 248, 250, 252, 254, 256,
   };
 
-
-
-void Update_Channel4(uint32_t* buffer, int channel, int time, uint32_t color) {
-    double frequency = 0.2;  // Adjust the frequency of the animation
-    double phase = channel * 2.0 * M_PI / NUM_CHANNELS;
-
-	//calculate some blinky blinky
-    for (int col = 0; col < 64; col++) {
-        for (int row = 0; row < 16; row++) {
-            int i = XYtoSerpentine(col, row);
-
-			//get values between 0 and 1
-            //float val1 = sin(frequency * i + phase + 0.1 * time) * 0.5 + 0.5;
-            float value = 1-fabs(sin(frequency * row + phase + 0.1 * time));
-
-			uint32_t b = (uint32_t)(((color >> 0) & 0xFF) * value);
-			uint32_t r = (uint32_t)(((color >> 8) & 0xFF) * value);
-			uint32_t g = (uint32_t)(((color >> 16) & 0xFF) * value);
-
-			// gamma correction
-			b = gamma_lut[b];
-			r = gamma_lut[r];
-			g = gamma_lut[g];
-
-			// update the colors in the buffer for the current LED
-			buffer[i] = (buffer[i] & 0xFF000000) | // Preserve upper 8 bits
-						(b << 16)                | // Blue: bits 16-23
-						(r << 8)                 | // Red: bits 8-15
-						(g << 0); 		           // Green: bits 0-7
-        }
-    }
-	//needed to force DMA to work
-    //Xil_DCacheFlush();
-    Xil_DCacheFlushRange((UINTPTR)buffer, BUFFER_SIZE * sizeof(uint32_t));
-
-}
-
-// Function to convert from xy coordinate to serpentine
-int XYtoSerpentine(int row, int col) {
-    int serpentine = col;
-	// when row is odd then
-	if (row % 2 == 1){
-		// inverse column number
-		serpentine = 15 - col;
-	}
-	// calculate serpentine coordinate
-    return serpentine + row * 16;
-}
-
-uint32_t led_matrixol[32][32] = {};
-uint32_t led_matrixor[32][32] = {};
-uint32_t led_matrixur[32][32] = {};
-uint32_t led_matrixul[32][32] = {};
 
 uint32_t Gamma_LUT_Init(int row, int col, int index)
 {

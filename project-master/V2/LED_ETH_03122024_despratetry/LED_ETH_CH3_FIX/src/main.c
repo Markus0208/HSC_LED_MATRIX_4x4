@@ -83,8 +83,8 @@ int main()
 	                THREAD_STACKSIZE,
 	                DEFAULT_THREAD_PRIO);
 	sys_thread_new("led_thrd", (void(*)(void*))led_thread, 0,
-		                THREAD_STACKSIZE,
-		                DEFAULT_THREAD_PRIO);
+		               THREAD_STACKSIZE,
+		               DEFAULT_THREAD_PRIO);
 	vTaskStartScheduler();
 	while(1);
 	return 0;

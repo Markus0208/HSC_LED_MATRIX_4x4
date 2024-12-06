@@ -29,11 +29,8 @@ void process_echo_request(void *p)
     int sd = (int)p;
     size_t buffer_capacity = INITIAL_BUFFER_SIZE;
     size_t buffer_size = 0;
-    uint8_t *recv_buffer = malloc(4096);
+    //uint8_t *recv_buffer = malloc(4096);
     uint32_t total_elements_received = 0;
-    uint32_t total_array_size = 0;
-    uint32_t *received_array = NULL;
-    uint32_t new_total_size = 0;
 
     if (!recv_buffer)
     {
@@ -67,29 +64,28 @@ void process_echo_request(void *p)
                 xil_printf("End of transmission.\n");
                 xil_printf("Total elements received: %u\n", total_elements_received);
 
-                free(recv_buffer);
-				xil_printf("free recvbuffer ");
-				recv_buffer = NULL;
-				xil_printf("recvbuffer = null ");
+                //free(recv_buffer);
+				//xil_printf("free recvbuffer ");
+				//recv_buffer = NULL;
+				//xil_printf("recvbuffer = null ");
 
                 xil_printf("bevor sem echo ");
                 if (xSemaphoreTake(ptr_binary_semphr, portMAX_DELAY) == pdTRUE)
                 {
                     xil_printf("in sem echo ");
 
-                    memcpy(global_received_array, received_array, total_elements_received * sizeof(uint32_t));
+                    //memcpy(global_received_array, received_array, total_elements_received * sizeof(uint32_t));
                     NEW_DATA_FLAG = 1;
 
                     xil_printf("sem given echo ");
                     xSemaphoreGive(ptr_binary_semphr);
                 }
+                else{xil_printf("Sem not given");}
 
 
-                free(received_array);
 
-                received_array = NULL;
                 total_elements_received = 0;
-                total_array_size = 0;
+
                 block_size = 0;
                 offset += sizeof(block_size);
 
@@ -100,6 +96,7 @@ void process_echo_request(void *p)
 
 
                 close(sd);
+
                 xil_printf("bevore taskdelete");
                 vTaskDelete(NULL);
                 xil_printf("task gel�scht");
@@ -112,35 +109,16 @@ void process_echo_request(void *p)
                 break; // Unvollst�ndiger Block, auf mehr Daten warten.
             }
 
-            if (received_array == NULL)
-            {
-                total_array_size = block_size;
-                received_array = malloc(total_array_size * sizeof(uint32_t));
-                if (!received_array)
-                {
-                    xil_printf("Memory allocation for received_array failed.\n");
-                    break;
-                }
-            }
-            else
-            {
-                new_total_size = total_elements_received + block_size;
-                uint32_t *new_array = realloc(received_array, new_total_size * sizeof(uint32_t));
-                if (!new_array)
-                {
-                    xil_printf("Memory reallocation failed.\n");
-                    break;
-                }
-                received_array = new_array;
-                //free(new_array);
-                total_array_size = new_total_size;
-            }
 
             uint32_t *payload_data = (uint32_t *)(recv_buffer + offset + sizeof(uint32_t));
+            if (xSemaphoreTake(ptr_binary_semphr, portMAX_DELAY) == pdTRUE)
+                           {
             for (uint32_t i = 0; i < block_size; i++)
             {
-                received_array[total_elements_received + i] = payload_data[i];
+            	global_received_array[total_elements_received + i] = payload_data[i];
             }
+            xSemaphoreGive(ptr_binary_semphr);
+                           }
             total_elements_received += block_size;
 
             xil_printf("Received block of %u elements.\n", block_size);
