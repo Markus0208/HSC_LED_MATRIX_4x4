@@ -111,7 +111,25 @@ def clear_screen():
     else:  # Für Unix/Linux/Mac
         os.system('clear')
 
-
+def adjust_brightness(pixel_array, factor):
+    """
+    Skaliert die Helligkeit des Bildes basierend auf dem angegebenen Faktor.
+    :param pixel_array: 2D-Array mit Hex-Farbwerten
+    :param factor: Skalierungsfaktor (0.01 bis 1.0)
+    :return: Angepasstes 2D-Pixel-Array
+    """
+    adjusted_array = []
+    for row in pixel_array:
+        adjusted_row = []
+        for hex_value in row:
+            int_value = int(hex_value, 16)
+            green = int(((int_value >> 16) & 0xFF) * factor)
+            red = int(((int_value >> 8) & 0xFF) * factor)
+            blue = int((int_value & 0xFF) * factor)
+            green, red, blue = [min(255, max(0, c)) for c in (green, red, blue)]
+            adjusted_row.append(f"0x{green:02X}{red:02X}{blue:02X}")
+        adjusted_array.append(adjusted_row)
+    return adjusted_array
 
 def main():
     server_ip = "192.168.1.10"
@@ -129,6 +147,7 @@ def main():
         print("6. Schwert")
         print("7. Vogel")
         print("8. Mario")
+        print("9. Beenden")
 
         choice = input("Waehle das Bild: ")
         if choice == "1":
@@ -146,16 +165,19 @@ def main():
         elif choice == "7":
             input_image = "vogel.png"
         elif choice == "8":
-            input_image = "mario.png"
+            input_image = "earth.jpg"
+        elif choice == "9":
+            input_image = "schwarz.png"
         else:
-            print("Ungueltige Eingabe. Bitte waehle eine Zahl von 1 bis 8.")
+            print("Ungueltige Eingabe. Bitte waehle eine Zahl von 1 bis 9.")
 
 
         # Beispielaufruf der Funktion
         resize_image(input_image, "ausgabe.png", 64, 64)
-        output_csv_path = "pixelwerte.csv"
+        output_csv_path = "pixelwerte.csv"  # can be deleted later
         pixel_array = image_to_pixel_array("ausgabe.png", output_csv_path)
-        array_to_image(pixel_array, "output_image.png")
+        pixel_array=adjust_brightness(pixel_array, 0.3)
+        #array_to_image(pixel_array, "output_image.png") # can be deleted (was just for testing)
         
         
         # if pixel_array:
@@ -165,7 +187,7 @@ def main():
         #             print(row)
             
         send_large_array_to_server(server_ip, server_port, pixel_array)
-        # Überprüfen Sie das Betriebssystem und führen Sie den entsprechenden Befehl aus
+        
         
        
         
@@ -173,3 +195,12 @@ def main():
 if __name__ == "__main__":
     main()
 
+# todo
+# Funktion die die erstellten Pixelarrays mit Faktor 0,01 - 1 multipliziert (Helligkeitsanpassung)
+# Frontend für Auswahl des Bildes
+# Schieberegler für Helligkeit
+# Option zur Auswahl der Bildgröße (32x32 48x48 64x64 + Resize Parameter anpassen)
+# Option zur Auswahl des Servers (Ip + Port, default: 192.168.165.10 & Port 7)
+# Send Cyclic Data (wenn send Cyclic is checked, abfrage in welchem intervall gesendet werden soll + Stop funktion)
+# Stop Funktion (send empty array (0x00) to stop the server))
+# Ordner auswahlmöglichkeit -> alle bilder im Ordner werden dargestellt-> entweder alle zyklisch durchlaufen oder ein ausgewähltes darstellen
