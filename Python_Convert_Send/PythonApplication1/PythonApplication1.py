@@ -84,12 +84,21 @@ if __name__ == "__main__":
 # todo
 # Funktion die die erstellten Pixelarrays mit Faktor 0,01 - 1 multipliziert (Helligkeitsanpassung) -- done
 # Stop Funktion (send empty array (0x00) to stop the server))   -- done
-# Backend funktionen anpassen, sodass keine unnötigen Dateien erzeugt werden
+# Schieberegler für Helligkeit -- done
+# Option zur Auswahl der Bildgröße (32x32 48x48 64x64 + Resize Parameter anpassen) -- done
+# Option zur Auswahl des Servers (Ip + Port, default: 192.168.165.10 & Port 7) -- done
+# Send Cyclic Data (wenn send Cyclic is checked, abfrage in welchem intervall gesendet werden soll + Stop funktion) -- done
+# Ordner auswahlmöglichkeit -> alle bilder im Ordner werden dargestellt-> entweder alle zyklisch durchlaufen oder ein ausgewähltes darstellen --done
 
-# Frontend für Auswahl des Bildes
-# Schieberegler für Helligkeit
-# Option zur Auswahl der Bildgröße (32x32 48x48 64x64 + Resize Parameter anpassen)
-# Option zur Auswahl des Servers (Ip + Port, default: 192.168.165.10 & Port 7)
-# Send Cyclic Data (wenn send Cyclic is checked, abfrage in welchem intervall gesendet werden soll + Stop funktion)
-# Ordner auswahlmöglichkeit -> alle bilder im Ordner werden dargestellt-> entweder alle zyklisch durchlaufen oder ein ausgewähltes darstellen
 
+
+
+
+#########ToDo############
+# Aufräumen - Entfernen aller Deutschen Kommentare, Texte und auskommentierten Codeschnipsel
+# paar Kommentare zu den funktionen (englisch)
+# Anpassen der Frontend Boxen (Zeitintervall unter send cyclic ....)
+# In C Funktion für 3x3 Matrizen
+# Python Backend funktionen anpassen, sodass keine unnötigen Dateien erzeugt werden
+# Select Image weg + Auswahl eines einzelnen Bildes aus der Auflistung rechts eventuell Maus scrooling für die Bilder einfügen
+# begrenzen des Cyclic Timers auf 1 sekunde
