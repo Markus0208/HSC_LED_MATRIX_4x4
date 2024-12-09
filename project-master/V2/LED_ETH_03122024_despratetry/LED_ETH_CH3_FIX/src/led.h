@@ -58,7 +58,7 @@ void display_matrix_dma0(uint32_t *buffer, int channel);
 void display_matrix_dma1(uint32_t *buffer, int channel);
 void display_matrix_dma2(uint32_t *buffer, int channel);
 void display_matrix_dma3(uint32_t *buffer, int channel);
-int led_thread(void);
+int led_thread(uint32_t total_elements_received);
 
 
 

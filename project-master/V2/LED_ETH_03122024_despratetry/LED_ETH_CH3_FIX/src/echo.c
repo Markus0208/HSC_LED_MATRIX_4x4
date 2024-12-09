@@ -78,7 +78,7 @@ void process_echo_request(void *p)
                 						task_count2 = uxTaskGetNumberOfTasks();
                 						xil_printf("Aktive Tasks: %u\n", task_count2);
 
-                						led_thread();
+                						led_thread(total_elements_received);
 
 
                 block_size = 0;

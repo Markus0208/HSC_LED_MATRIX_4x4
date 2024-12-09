@@ -26,7 +26,7 @@ void initSemphr(void){
 	ptr_binary_semphr = xSemaphoreCreateBinary();
 
 	if (ptr_binary_semphr == NULL){
-		xil_printf("ALLLAAARMMM");
+		xil_printf("Semaphore could not be created");
 	}
 	xSemaphoreGive(ptr_binary_semphr);
 

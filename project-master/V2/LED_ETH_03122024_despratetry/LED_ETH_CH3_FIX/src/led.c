@@ -252,7 +252,7 @@ void print_active_tasks() {
 
 
 
-int led_thread(){
+int led_thread(uint32_t total_elements_received){
 
 		// General Init
 		 int counter = 0;
@@ -269,6 +269,7 @@ int led_thread(){
 
 	//while (1)
 		//{
+
 
 		if (xSemaphoreTake(ptr_binary_semphr, portMAX_DELAY) == pdTRUE){
 			local_flag=NEW_DATA_FLAG;
@@ -292,19 +293,16 @@ int led_thread(){
 		}
 
 
-
-
-
-		//xil_printf("bevore if");
-
 			if (local_flag == 1) {
-print_active_tasks();
+						print_active_tasks();
 						xil_printf("Free heap size: %u\n", xPortGetFreeHeapSize());
 						task_count = uxTaskGetNumberOfTasks();
 						xil_printf("Aktive Tasks: %u\n", task_count);
 
-				xil_printf("In if ");
 				local_flag=0;
+
+				if (total_elements_received == 4096)
+				{
 
 				for (int row = 0; row < 64; row++)
 				{
@@ -341,8 +339,47 @@ print_active_tasks();
 					for (volatile int i = 0; i < 0xFFFF; i++)
 						;
 				}
-			}
-		//}
+				}
+				else if(total_elements_received == 1024)
+				{
+					for (int row = 0; row < 32; row++)
+									{
+										for (int col = 0; col < 32; col++)
+										{
+											// Indexberechnung
+											int index = row * 32 + col;
+
+											// Sicherstellen, dass der Index innerhalb der Grenzen liegt
+											if (index < 1024)
+											{
+												led_matrix2[row][col] = local64buffer[index];
+											}
+											else
+											{
+												led_matrix2[row][col] = 0; // Standardwert, falls Daten fehlen
+											}
+										}
+									}
+									xil_printf("fill sub arrays ");
+									// Fill SubArrays
+
+									Fill_Sub_Arrays();
+
+									for (int channel = 0; channel < 1; channel++)
+									{
+
+										display_matrix_dma(LED_BUFFER_Instances[channel], channel);
+
+										// Start DMA transfer
+
+										u32 Transmit_Status = XAxiDma_SimpleTransfer(DMA_Instances[channel], (UINTPTR)LED_BUFFER_Instances[channel], 4 * BUFFER_SIZE, XAXIDMA_DMA_TO_DEVICE);
+
+										for (volatile int i = 0; i < 0xFFFF; i++)
+											;
+									}
+				}
+
+		}
 	//vTaskDelete(NULL);
 	    return 0;
 	}
