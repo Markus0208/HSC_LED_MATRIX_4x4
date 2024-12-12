@@ -4,28 +4,21 @@ import csv
 import socket
 import struct
 import numpy as np
-import os
 
-def resize_image(input_path, output_path, new_width, new_height):
+def image_to_pixel_array(input_path, new_width, new_height):#, csv_output_path):
+    """
+    Converts an image to a 2D array of hex color values in 0xGGRRBB format.
     
-    try:
-        # Bild oeffnen
-        with Image.open(input_path) as img:
-            # Bild skalieren mit LANCZOS-Filter für hohe Qualität
-            resized_img = img.resize((new_width, new_height), Image.LANCZOS)
-            # Bild speichern
-            resized_img.save(output_path)
-            print(f"Bild erfolgreich auf {new_width}x{new_height} skaliert und gespeichert als {output_path}.")
-    except Exception as e:
-        print(f"Fehler beim Skalieren des Bildes: {e}")
-
-
-
-def image_to_pixel_array(input_path, csv_output_path):
+    :param input_path: Path to the input image file.
+    :param new_width: The width to resize the image to.
+    :param new_height: The height to resize the image to.
+    :return: 2D array of hex color values.
+    """
  
     try:
         with Image.open(input_path) as img:
-            img = img.convert("RGB")
+            resized_img = img.resize((new_width, new_height), Image.LANCZOS)
+            img = resized_img.convert("RGB")
             width, height = img.size
             pixel_array = []
 
@@ -33,29 +26,43 @@ def image_to_pixel_array(input_path, csv_output_path):
                 row = []
                 for x in range(width):
                     r, g, b = img.getpixel((x, y))
-                    # In das gewuenschte Format 0xGGRRBB konvertieren
+                    # convert to 0xGGRRBB format
                     hex_color = f"0x{g:02X}{r:02X}{b:02X}"
                     row.append(hex_color)
                 pixel_array.append(row)
 
-            # CSV-Datei speichern
-            with open(csv_output_path, mode='w', newline='') as csvfile:
-                csv_writer = csv.writer(csvfile)
-                for row in pixel_array:
-                    csv_writer.writerow(row)
+            # # Save Pixel Array to CSV file
+            # with open(csv_output_path, mode='w', newline='') as csvfile:
+            #     csv_writer = csv.writer(csvfile)
+            #     for row in pixel_array:
+            #         csv_writer.writerow(row)
 
-            print(f"Pixelwerte wurden erfolgreich in {csv_output_path} gespeichert.")
+            # print(f"pixelarray saved in {csv_output_path}.")
             return pixel_array
 
     except Exception as e:
-        print(f"Fehler beim Verarbeiten des Bildes: {e}")
+        print(f"Error while proccesing picture: {e}")
         return None
 
 
 def hex_to_uint32(hex_value):
+    """
+    Converts a hex color value to a 32-bit unsigned integer.
+    
+    :param hex_value: Hex color value in 0xGGRRBB format.
+    :return: 32-bit unsigned integer.
+    """
     return int(hex_value, 16)
 
 def send_large_array_to_server(server_ip, server_port, data_array, max_block_size=256):
+    """
+    Sends a large 2D array of hex color values to a server in chunks.
+    
+    :param server_ip: IP address of the server.
+    :param server_port: Port number of the server.
+    :param data_array: 2D array of hex color values.
+    :param max_block_size: Maximum size of each chunk to send.
+    """
   
     uint32_array = [hex_to_uint32(value) for row in data_array for value in row]
     total_size = len(uint32_array)
@@ -66,7 +73,7 @@ def send_large_array_to_server(server_ip, server_port, data_array, max_block_siz
     server_address = (server_ip, server_port)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-     # Nagle-Algorithmus deaktivieren
+     # Nagle-algorithm
     sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 
     sock.connect(server_address)
@@ -90,12 +97,27 @@ def send_large_array_to_server(server_ip, server_port, data_array, max_block_siz
     finally:
         sock.close()
 
+
 def stop_function(server_ip, server_port):
+    """
+    Sends a stop signal to the server by sending a predefined 2D array.
+    
+    :param server_ip: IP address of the server.
+    :param server_port: Port number of the server.
+    """
+
     data_array = [["0x010101" for _ in range(64)] for _ in range(64)]
     send_large_array_to_server(server_ip, server_port, data_array)
 
+# Get Image from Array (testing)
+def array_to_image(array, output_file="output_image.png"): 
+    """
+    Converts a 2D array of hex color values to an image and saves it.
+    
+    :param array: 2D array of hex color values.
+    :param output_file: Path to save the output image file.
+    """
 
-def array_to_image(array, output_file="output_image.png"):
     height = len(array)
     width = len(array[0]) if height > 0 else 0
     image = Image.new("RGB", (width, height))
@@ -108,12 +130,6 @@ def array_to_image(array, output_file="output_image.png"):
             image.putpixel((x, y), (red, green, blue))
     image.save(output_file)
 
-def clear_screen():
-    # Überprüfen Sie das Betriebssystem und führen Sie den entsprechenden Befehl aus
-    if os.name == 'nt':  # Für Windows
-        os.system('cls')
-    else:  # Für Unix/Linux/Mac
-        os.system('clear')
 
 def adjust_brightness(pixel_array, factor):
     """
