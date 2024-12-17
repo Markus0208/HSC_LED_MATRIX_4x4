@@ -28,7 +28,7 @@ class ImageProcessingApp:
         self.is_sending_cyclic = False
         self.cyclic_thread = None
         self.cyclic_enabled = False
-        self.selected_images = set()  # Set to track selected images
+        self.selected_images = set()
 
     def setup_ui(self):
         """
@@ -99,10 +99,8 @@ class ImageProcessingApp:
         self.image_frame = ttk.Frame(self.canvas)
         self.canvas.create_window((0, 0), window=self.image_frame, anchor="nw")
 
-        # Add mouse scrolling support
         self.canvas.bind_all("<MouseWheel>", lambda event: self.canvas.yview_scroll(-1 * (event.delta // 120), "units"))
 
-        # Create a style for selected images
         self.style = ttk.Style()
         self.style.configure('Selected.TLabel', borderwith=5, padding=3, relief="solid", background = "red", foreground ="red" )
 
@@ -162,13 +160,11 @@ class ImageProcessingApp:
         :param widget: The widget representing the image.
         """
 
-        # Deselect previously selected image
         for selected_image in self.selected_images:
             selected_widget = self.image_frame.nametowidget(selected_image)
             selected_widget.configure(style='TLabel')
         self.selected_images.clear()
 
-        # Select the new image
         self.selected_images.add(widget._name)
         widget.configure(style='Selected.TLabel')
 
@@ -205,10 +201,10 @@ class ImageProcessingApp:
         Sends the selected image(s) to the server.
         """
 
-        if self.selected_images:  # Send only selected images
+        if self.selected_images:
             for image_path in self.selected_images:
                 self.send_single_image(image_path)
-        elif self.selected_image_paths:  # Send all images cyclically if none are selected
+        elif self.selected_image_paths:
             if self.cyclic_enabled and not self.is_sending_cyclic:
                 self.start_cyclic_send()
             else:
@@ -222,7 +218,6 @@ class ImageProcessingApp:
         """
 
         size = tuple(map(int, self.size_var.get().split('x')))
-        #resize_image(image_path, "temp_resized.png", size[0], size[1])
         pixel_array = image_to_pixel_array(image_path, size[0], size[1])#, "temp_pixelwerte.csv") for csv output
         server_ip = self.server_ip_var.get()
         server_port = self.server_port_var.get()
