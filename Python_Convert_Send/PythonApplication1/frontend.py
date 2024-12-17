@@ -104,12 +104,12 @@ class ImageProcessingApp:
 
         # Create a style for selected images
         self.style = ttk.Style()
-        self.style.configure('Selected.TLabel', borderwidth=3, relief="solid")
+        self.style.configure('Selected.TLabel', borderwith=5, padding=3, relief="solid", background = "red", foreground ="red" )
 
     def update_brightness(self, value):
         """
         Updates the brightness label based on the slider value.
-        
+
         :param value: The current value of the brightness slider.
         """
 
@@ -156,19 +156,22 @@ class ImageProcessingApp:
 
     def toggle_image_selection(self, image_path, widget):
         """
-        Toggles the selection of an image.
-        
+        Toggles the selection of an image, ensuring only one image is selected at a time.
+    
         :param image_path: The path of the image to toggle.
         :param widget: The widget representing the image.
         """
 
-        # Toggle selection of an image
-        if image_path in self.selected_images:
-            self.selected_images.remove(image_path)
-            widget.configure(style='TLabel')
-        else:
-            self.selected_images.add(image_path)
-            widget.configure(style='Selected.TLabel')
+        # Deselect previously selected image
+        for selected_image in self.selected_images:
+            selected_widget = self.image_frame.nametowidget(selected_image)
+            selected_widget.configure(style='TLabel')
+        self.selected_images.clear()
+
+        # Select the new image
+        self.selected_images.add(widget._name)
+        widget.configure(style='Selected.TLabel')
+
 
     def toggle_cyclic_send(self):
         """

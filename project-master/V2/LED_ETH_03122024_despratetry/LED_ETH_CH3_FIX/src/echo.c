@@ -68,7 +68,7 @@ void process_echo_request(void *p)
                 xil_printf("bevor sem echo ");
                 if (xSemaphoreTake(ptr_binary_semphr, portMAX_DELAY) == pdTRUE) {
                     NEW_DATA_FLAG = 1;
-                    // Schreibe sicher in global_received_array
+                    
                     xSemaphoreGive(ptr_binary_semphr);
                 } else {
                     xil_printf("Semaphore could not be taken.\n");
@@ -94,7 +94,7 @@ void process_echo_request(void *p)
             size_t expected_data_size = block_size * sizeof(uint32_t);
             if (buffer_size - offset < sizeof(uint32_t) + expected_data_size)
             {
-                break; // Unvollst�ndiger Block, auf mehr Daten warten.
+                break; 
             }
 
 

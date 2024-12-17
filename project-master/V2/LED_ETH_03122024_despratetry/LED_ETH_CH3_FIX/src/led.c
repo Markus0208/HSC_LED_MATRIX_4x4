@@ -44,6 +44,7 @@ uint32_t LED_BUFFER_CH1[BUFFER_SIZE] __attribute__((aligned(32)));
 uint32_t LED_BUFFER_CH2[BUFFER_SIZE] __attribute__((aligned(32)));
 uint32_t LED_BUFFER_CH3[BUFFER_SIZE] __attribute__((aligned(32)));
 uint32_t LED_BUFFER_CH4[BUFFER_SIZE] __attribute__((aligned(32)));
+uint32_t *LED_BUFFER_4848L[5*256] __attribute__((aligned(32)));
 uint32_t *LED_BUFFER_Instances[NUM_CHANNELS] = {LED_BUFFER_CH1, LED_BUFFER_CH2, LED_BUFFER_CH3, LED_BUFFER_CH4};
 
 
@@ -145,22 +146,38 @@ uint32_t Gamma_LUT_Init(int row, int col, int index)
 	return (HexCol & 0xFF0000000 | (g << 16) | (r << 8) | (b << 0));
 }
 
+uint32_t Gamma_L_Init(uint32_t buffi)
+{
+	
+
+	uint32_t b = (uint32_t)(((buffi >> 0) & 0xFF));
+	uint32_t r = (uint32_t)(((buffi >> 8) & 0xFF));
+	uint32_t g = (uint32_t)(((buffi >> 16) & 0xFF));
+
+	b = gamma_lut[b];
+	r = gamma_lut[r];
+	g = gamma_lut[g];
+
+	return (buffi & 0xFF0000000 | (g << 16) | (r << 8) | (b << 0));
+}
+
+/*
+Process the matrix section
+*/
 int process_matrix_section(uint32_t *buffer, int i, int row_start, int row_end, int col_start, int col_end, int index)
 {
 	for (int row = row_start; row < row_end; row++)
 	{
 		for (int col = col_start; col < col_end; col++)
 		{
-			// Bestimmen der richtigen Spaltenreihenfolge
+			
 			if (row % 2 == 0)
-			{ // Gerade Reihe
-				// Spalte von rechts nach links
-				buffer[i] = Gamma_LUT_Init(row, (15 - col), index); // Umgekehrte Reihenfolge fï¿½r gerade Reihen
+			{ 
+				buffer[i] = Gamma_LUT_Init(row, (15 - col), index); 
 			}
 			else
-			{ // Ungerade Reihe
-				// Spalte von links nach rechts
-				buffer[i] = Gamma_LUT_Init(row, col, index); // Von links nach rechts fï¿½r ungerade Reihen
+			{ 
+				buffer[i] = Gamma_LUT_Init(row, col, index);
 			}
 			i++;
 		}
@@ -168,19 +185,73 @@ int process_matrix_section(uint32_t *buffer, int i, int row_start, int row_end, 
 	return i;
 }
 
+/*
+Display the matrix
+*/
 void display_matrix_dma(uint32_t *buffer, int channel)
 {
 	int i = 0;
 
-	// Farben von led_matrix in den Buffer konvertieren
 
 	i = process_matrix_section(buffer, i, 0, 16, 0, 16, channel);
 	i = process_matrix_section(buffer, i, 0, 16, 16, 32, channel);
 	i = process_matrix_section(buffer, i, 16, 32, 16, 32, channel);
 	i = process_matrix_section(buffer, i, 16, 32, 0, 16, channel);
 
-	// DMA-ï¿½bertragung starten
+	
 	Xil_DCacheFlush();
+}
+
+/*
+Display the matrix for the L function
+*/
+display_matrix_L_function(uint32_t *buffer, int channel)
+{
+	for(int i = 0; i<16; i++)
+	{
+		for(int j = 0; j<16; j++)
+		{
+			buffer[i*16+j] = led_matrixor[i][j];
+		}
+	}
+
+	for(int i = 16; i<32; i++)
+	{
+		for(int j = 0; j<16; j++)
+		{
+			buffer[256+i*16+j] = led_matrixor[i][j];
+		}
+	}
+
+	for(int i = 0; i<16; i++)
+	{
+		for(int j = 0; j<16; j++)
+		{
+			buffer[512+i*16+j] = led_matrixur[i][j];
+		}
+	}
+
+	for(int i = 0; i<16; i++)
+	{
+		for(int j = 16; j<32; j++)
+		{
+			buffer[512+256+i*16+j] = led_matrixul[i][j];
+		}
+	}
+
+	for(int i = 0; i<16; i++)
+	{
+		for(int j = 0; j<16; j++)
+		{
+			buffer[512+512+i*16+j] = led_matrixul[i][j];
+		}
+	}	
+	uint32_t buffi = 0;
+	for(int i = 0; i<9*256; i++)
+	{
+		buffi = buffer[i] = 0;
+		buffer[i] = Gamma_L_Init(buffi);
+	}
 }
 
 
@@ -220,33 +291,32 @@ void Fill_Sub_Arrays(){
 }
 
 void print_active_tasks() {
-    // Puffer für die Task-Statusinformationen
-    TaskStatus_t taskStatusArray[20]; // Array für maximal 10 Tasks
+    
+    TaskStatus_t taskStatusArray[20]; 
     UBaseType_t taskCount;
-    char buffer[128]; // Puffer für die Debug-Ausgabe
+    char buffer[128];
 
-    // Anzahl der Tasks im System abrufen
+   
     taskCount = uxTaskGetNumberOfTasks();
 
-    // Speicher für alle Tasks allokieren
     TaskStatus_t *taskStatusArrayDynamic = pvPortMalloc(taskCount * sizeof(TaskStatus_t));
 
     if (taskStatusArrayDynamic == NULL) {
-        xil_printf("Fehler: Nicht genug Speicher für Task-Daten\n");
+        xil_printf("Fehler: Nicht genug Speicher fï¿½r Task-Daten\n");
         return;
     }
 
-    // Systemstatus abrufen
+
     UBaseType_t actualTaskCount = uxTaskGetSystemState(taskStatusArrayDynamic, taskCount, NULL);
 
     xil_printf("Aktive Tasks im System:\n");
     for (UBaseType_t i = 0; i < actualTaskCount; i++) {
-        // Task-Name ausgeben
+
         sprintf(buffer, "Task Name: %s\n", taskStatusArrayDynamic[i].pcTaskName);
         xil_printf("%s", buffer);
     }
 
-    // Speicher freigeben
+
     vPortFree(taskStatusArrayDynamic);
 }
 
@@ -254,12 +324,12 @@ void print_active_tasks() {
 
 int led_thread(uint32_t total_elements_received){
 
-		// General Init
+		
 		 int counter = 0;
 
 		 for (int i = 0; i < NUM_CHANNELS; i++)
 		 {
-		 	// start with empty buffer
+		 	
 		 	Clear_Buffer(LED_BUFFER_Instances[i]);
 		 }
 		DMA_INIT();
@@ -267,8 +337,7 @@ int led_thread(uint32_t total_elements_received){
 
 		xil_printf("--------------");
 
-	//while (1)
-		//{
+	
 
 
 		if (xSemaphoreTake(ptr_binary_semphr, portMAX_DELAY) == pdTRUE){
@@ -277,12 +346,12 @@ int led_thread(uint32_t total_elements_received){
 
 				if (local64buffer == NULL) {
 				    xil_printf("local64buffer is NULL\n");
-				    return;  // Fehlerbehandlung oder Rückgabe
+				    return; 
 				}
 
 				if (global_received_array == NULL) {
 				    xil_printf("global_received_array is NULL\n");
-				    return;  // Fehlerbehandlung oder Rückgabe
+				    return;  
 				}
 				xil_printf("bevor memcpy");
 				memcpy(local64buffer, global_received_array, 4096 * sizeof(uint32_t));
@@ -308,17 +377,17 @@ int led_thread(uint32_t total_elements_received){
 				{
 					for (int col = 0; col < 64; col++)
 					{
-						// Indexberechnung
+						
 						int index = row * 64 + col;
 
-						// Sicherstellen, dass der Index innerhalb der Grenzen liegt
+						
 						if (index < 4096)
 						{
 							led_matrix2[row][col] = local64buffer[index];
 						}
 						else
 						{
-							led_matrix2[row][col] = 0; // Standardwert, falls Daten fehlen
+							led_matrix2[row][col] = 0;
 						}
 					}
 				}
@@ -340,23 +409,66 @@ int led_thread(uint32_t total_elements_received){
 						;
 				}
 				}
+				else if(total_elements_received == 9*256)
+				{
+					for (int row = 0; row < 64; row++)
+									{
+										for (int col = 0; col < 48; col++)
+										{
+											// indexcalculation
+											int index = row * 48 + col;
+
+											// index is within the limits
+											if (index < 9*256)
+											{
+												led_matrix2[row][col] = local64buffer[index];
+											}
+											else
+											{
+												led_matrix2[row][col] = 0; // standard value if data is missing
+											}
+										}
+									}
+									xil_printf("fill sub arrays ");
+									// Fill SubArrays
+
+									Fill_Sub_Arrays();
+
+									
+
+										display_matrix_dma(LED_BUFFER_Instances[0], 0);
+										display_matrix_L_function(LED_BUFFER_4848L, 1);
+
+										// Start DMA transfer
+									
+										u32 Transmit_Status = XAxiDma_SimpleTransfer(DMA_Instances[0], (UINTPTR)LED_BUFFER_Instances[0], 4 * BUFFER_SIZE, XAXIDMA_DMA_TO_DEVICE);
+
+										for (volatile int i = 0; i < 0xFFFF; i++)
+											;
+
+										Transmit_Status = XAxiDma_SimpleTransfer(DMA_Instances[1], (UINTPTR)LED_BUFFER_4848L, 4 * 5 * 256, XAXIDMA_DMA_TO_DEVICE);
+
+										for (volatile int i = 0; i < 0xFFFF; i++)
+											;
+									
+				}
 				else if(total_elements_received == 1024)
 				{
 					for (int row = 0; row < 32; row++)
 									{
 										for (int col = 0; col < 32; col++)
 										{
-											// Indexberechnung
+											// indexcalculation
 											int index = row * 32 + col;
 
-											// Sicherstellen, dass der Index innerhalb der Grenzen liegt
+											// index is within the limits
 											if (index < 1024)
 											{
 												led_matrix2[row][col] = local64buffer[index];
 											}
 											else
 											{
-												led_matrix2[row][col] = 0; // Standardwert, falls Daten fehlen
+												led_matrix2[row][col] = 0; // standard value if data is missing
 											}
 										}
 									}

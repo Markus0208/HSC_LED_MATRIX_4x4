@@ -5,13 +5,6 @@ if __name__ == "__main__":
 
 
 
-
-
-
-
-
-    #main()
-
 # todo
 # Funktion die die erstellten Pixelarrays mit Faktor 0,01 - 1 multipliziert (Helligkeitsanpassung) -- done
 # Stop Funktion (send empty array (0x00) to stop the server))   -- done
@@ -28,6 +21,6 @@ if __name__ == "__main__":
 
 
 
-# Select Image weg + Auswahl eines einzelnen Bildes aus der Auflistung rechts eventuell Maus scrooling für die Bilder einfügen
-# Aktuell ist es möglich mehrere Bilder auszuwählen dadurch kommts zu einem Fehler wenn gesendet wird
-# In C Funktion für 3x3 Matrizen
+# Select Image weg + Auswahl eines einzelnen Bildes aus der Auflistung rechts eventuell Maus scrooling für die Bilder einfügen -- done
+# Aktuell ist es möglich mehrere Bilder auszuwählen dadurch kommts zu einem Fehler wenn gesendet wird -- should be done
+# In C Funktion für 3x3 Matrizen -- done
