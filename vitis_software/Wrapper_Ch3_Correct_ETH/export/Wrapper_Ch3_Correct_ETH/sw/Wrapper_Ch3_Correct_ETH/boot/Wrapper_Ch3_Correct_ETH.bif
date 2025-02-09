@@ -1,0 +1,7 @@
+/*Wrapper_Ch3_Correct_ETH*/
+the_ROM_image:
+{
+  [bootloader]<Wrapper_Ch3_Correct_ETH/boot/fsbl.elf>
+   <bitstream> 
+  <elf,ps7_cortexa9_0>
+}

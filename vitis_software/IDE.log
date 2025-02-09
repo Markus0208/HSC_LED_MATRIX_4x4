@@ -1,0 +1,520 @@
+09:30:24 INFO  : Launching XSCT server: xsct.bat -n  -interactive C:\Users\thego\Desktop\HSC_PNM\vitis_software\temp_xsdb_launch_script.tcl
+09:30:25 INFO  : Registering command handlers for Vitis TCF services
+09:30:32 INFO  : XSCT server has started successfully.
+09:30:32 INFO  : plnx-install-location is set to ''
+09:30:36 INFO  : Platform repository initialization has completed.
+09:30:41 INFO  : Successfully done setting XSCT server connection channel  
+09:30:41 INFO  : Successfully done query RDI_DATADIR 
+09:30:41 INFO  : Successfully done setting workspace for the tool. 
+09:32:29 INFO  : Result from executing command 'getProjects': Wrapper_Ch3_Correct_ETH
+09:32:29 INFO  : Result from executing command 'getPlatforms': 
+09:32:29 WARN  : An unexpected exception occurred in the module 'platform project logging'
+09:32:29 INFO  : Platform 'Wrapper_Ch3_Correct_ETH' is added to custom repositories.
+09:32:35 INFO  : Platform 'Wrapper_Ch3_Correct_ETH' is added to custom repositories.
+09:33:54 INFO  : Result from executing command 'getProjects': Wrapper_Ch3_Correct_ETH
+09:33:54 INFO  : Result from executing command 'getPlatforms': Wrapper_Ch3_Correct_ETH|C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/Wrapper_Ch3_Correct_ETH.xpfm
+09:33:55 INFO  : Checking for BSP changes to sync application flags for project 'led_matrix_variable'...
+09:37:04 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+09:37:05 INFO  : Jtag cable 'Digilent Cora Z7 - 7007S 210370A9303AA' is selected.
+09:37:05 INFO  : 'jtag frequency' command is executed.
+09:37:05 INFO  : Context for 'APU' is selected.
+09:37:05 INFO  : System reset is completed.
+09:37:08 INFO  : 'after 3000' command is executed.
+09:37:08 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}' command is executed.
+09:37:09 INFO  : Device configured successfully with "C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit"
+09:37:10 INFO  : Context for 'APU' is selected.
+09:37:10 INFO  : Hardware design and registers information is loaded from 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa'.
+09:37:10 INFO  : 'configparams force-mem-access 1' command is executed.
+09:37:10 INFO  : Context for 'APU' is selected.
+09:37:10 INFO  : Sourcing of 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl' is done.
+09:37:10 INFO  : 'ps7_init' command is executed.
+09:37:10 INFO  : 'ps7_post_config' command is executed.
+09:37:10 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+09:37:10 INFO  : The application 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf' is downloaded to processor 'ps7_cortexa9_0'.
+09:37:11 INFO  : 'configparams force-mem-access 0' command is executed.
+09:37:11 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*"}
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}
+fpga -file C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+targets -set -nocase -filter {name =~"APU*"}
+loadhw -hw C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa -mem-ranges [list {0x40000000 0xbfffffff}] -regs
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*"}
+source C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "*A9*#0"}
+dow C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+09:37:11 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+09:37:11 INFO  : 'con' command is executed.
+09:37:11 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "*A9*#0"}
+con
+----------------End of Script----------------
+
+09:37:11 INFO  : Disconnected from the channel tcfchan#3.
+10:18:00 INFO  : Checking for BSP changes to sync application flags for project 'led_matrix_variable'...
+10:18:15 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:18:16 INFO  : Jtag cable 'Digilent Cora Z7 - 7007S 210370A9303AA' is selected.
+10:18:16 INFO  : 'jtag frequency' command is executed.
+10:18:16 INFO  : Context for 'APU' is selected.
+10:18:16 INFO  : System reset is completed.
+10:18:19 INFO  : 'after 3000' command is executed.
+10:18:19 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}' command is executed.
+10:18:20 INFO  : Device configured successfully with "C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit"
+10:18:20 INFO  : Context for 'APU' is selected.
+10:18:20 INFO  : Hardware design and registers information is loaded from 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa'.
+10:18:20 INFO  : 'configparams force-mem-access 1' command is executed.
+10:18:20 INFO  : Context for 'APU' is selected.
+10:18:20 INFO  : Sourcing of 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl' is done.
+10:18:21 INFO  : 'ps7_init' command is executed.
+10:18:21 INFO  : 'ps7_post_config' command is executed.
+10:18:21 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:18:21 INFO  : The application 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf' is downloaded to processor 'ps7_cortexa9_0'.
+10:18:21 INFO  : 'configparams force-mem-access 0' command is executed.
+10:18:21 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*"}
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}
+fpga -file C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+targets -set -nocase -filter {name =~"APU*"}
+loadhw -hw C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa -mem-ranges [list {0x40000000 0xbfffffff}] -regs
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*"}
+source C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "*A9*#0"}
+dow C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+10:18:21 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:18:21 INFO  : 'con' command is executed.
+10:18:21 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "*A9*#0"}
+con
+----------------End of Script----------------
+
+10:18:21 INFO  : Disconnected from the channel tcfchan#5.
+10:20:31 INFO  : Checking for BSP changes to sync application flags for project 'led_matrix_variable'...
+10:20:45 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:20:45 INFO  : Jtag cable 'Digilent Cora Z7 - 7007S 210370A9303AA' is selected.
+10:20:45 INFO  : 'jtag frequency' command is executed.
+10:20:45 INFO  : Context for 'APU' is selected.
+10:20:45 INFO  : System reset is completed.
+10:20:48 INFO  : 'after 3000' command is executed.
+10:20:48 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}' command is executed.
+10:20:49 INFO  : Device configured successfully with "C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit"
+10:20:49 INFO  : Context for 'APU' is selected.
+10:20:49 INFO  : Hardware design and registers information is loaded from 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa'.
+10:20:49 INFO  : 'configparams force-mem-access 1' command is executed.
+10:20:49 INFO  : Context for 'APU' is selected.
+10:20:49 INFO  : Sourcing of 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl' is done.
+10:20:50 INFO  : 'ps7_init' command is executed.
+10:20:50 INFO  : 'ps7_post_config' command is executed.
+10:20:50 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:20:50 INFO  : The application 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf' is downloaded to processor 'ps7_cortexa9_0'.
+10:20:50 INFO  : 'configparams force-mem-access 0' command is executed.
+10:20:50 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*"}
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}
+fpga -file C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+targets -set -nocase -filter {name =~"APU*"}
+loadhw -hw C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa -mem-ranges [list {0x40000000 0xbfffffff}] -regs
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*"}
+source C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "*A9*#0"}
+dow C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+10:20:50 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:20:50 INFO  : 'con' command is executed.
+10:20:50 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "*A9*#0"}
+con
+----------------End of Script----------------
+
+10:20:50 INFO  : Disconnected from the channel tcfchan#7.
+10:25:37 INFO  : Checking for BSP changes to sync application flags for project 'led_matrix_variable'...
+10:25:50 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:25:50 INFO  : Jtag cable 'Digilent Cora Z7 - 7007S 210370A9303AA' is selected.
+10:25:50 INFO  : 'jtag frequency' command is executed.
+10:25:50 INFO  : Context for 'APU' is selected.
+10:25:50 INFO  : System reset is completed.
+10:25:53 INFO  : 'after 3000' command is executed.
+10:25:53 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}' command is executed.
+10:25:55 INFO  : Device configured successfully with "C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit"
+10:25:55 INFO  : Context for 'APU' is selected.
+10:25:55 INFO  : Hardware design and registers information is loaded from 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa'.
+10:25:55 INFO  : 'configparams force-mem-access 1' command is executed.
+10:25:55 INFO  : Context for 'APU' is selected.
+10:25:55 INFO  : Sourcing of 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl' is done.
+10:25:55 INFO  : 'ps7_init' command is executed.
+10:25:55 INFO  : 'ps7_post_config' command is executed.
+10:25:55 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:25:55 INFO  : The application 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf' is downloaded to processor 'ps7_cortexa9_0'.
+10:25:55 INFO  : 'configparams force-mem-access 0' command is executed.
+10:25:55 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*"}
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}
+fpga -file C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+targets -set -nocase -filter {name =~"APU*"}
+loadhw -hw C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa -mem-ranges [list {0x40000000 0xbfffffff}] -regs
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*"}
+source C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "*A9*#0"}
+dow C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+10:25:55 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:25:55 INFO  : 'con' command is executed.
+10:25:55 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "*A9*#0"}
+con
+----------------End of Script----------------
+
+10:25:55 INFO  : Disconnected from the channel tcfchan#9.
+10:28:30 INFO  : Checking for BSP changes to sync application flags for project 'led_matrix_variable'...
+10:28:42 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:28:42 INFO  : Jtag cable 'Digilent Cora Z7 - 7007S 210370A9303AA' is selected.
+10:28:42 INFO  : 'jtag frequency' command is executed.
+10:28:42 INFO  : Context for 'APU' is selected.
+10:28:42 INFO  : System reset is completed.
+10:28:45 INFO  : 'after 3000' command is executed.
+10:28:45 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}' command is executed.
+10:28:46 INFO  : Device configured successfully with "C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit"
+10:28:46 INFO  : Context for 'APU' is selected.
+10:28:46 INFO  : Hardware design and registers information is loaded from 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa'.
+10:28:46 INFO  : 'configparams force-mem-access 1' command is executed.
+10:28:46 INFO  : Context for 'APU' is selected.
+10:28:46 INFO  : Sourcing of 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl' is done.
+10:28:47 INFO  : 'ps7_init' command is executed.
+10:28:47 INFO  : 'ps7_post_config' command is executed.
+10:28:47 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:28:47 INFO  : The application 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf' is downloaded to processor 'ps7_cortexa9_0'.
+10:28:47 INFO  : 'configparams force-mem-access 0' command is executed.
+10:28:47 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*"}
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}
+fpga -file C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+targets -set -nocase -filter {name =~"APU*"}
+loadhw -hw C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa -mem-ranges [list {0x40000000 0xbfffffff}] -regs
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*"}
+source C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "*A9*#0"}
+dow C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+10:28:47 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:28:47 INFO  : 'con' command is executed.
+10:28:47 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "*A9*#0"}
+con
+----------------End of Script----------------
+
+10:28:47 INFO  : Disconnected from the channel tcfchan#11.
+10:29:22 INFO  : Checking for BSP changes to sync application flags for project 'led_matrix_variable'...
+10:29:39 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:29:39 INFO  : Jtag cable 'Digilent Cora Z7 - 7007S 210370A9303AA' is selected.
+10:29:39 INFO  : 'jtag frequency' command is executed.
+10:29:39 INFO  : Context for 'APU' is selected.
+10:29:39 INFO  : System reset is completed.
+10:29:42 INFO  : 'after 3000' command is executed.
+10:29:42 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}' command is executed.
+10:29:44 INFO  : Device configured successfully with "C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit"
+10:29:44 INFO  : Context for 'APU' is selected.
+10:29:44 INFO  : Hardware design and registers information is loaded from 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa'.
+10:29:44 INFO  : 'configparams force-mem-access 1' command is executed.
+10:29:44 INFO  : Context for 'APU' is selected.
+10:29:44 INFO  : Sourcing of 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl' is done.
+10:29:44 INFO  : 'ps7_init' command is executed.
+10:29:44 INFO  : 'ps7_post_config' command is executed.
+10:29:44 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:29:44 INFO  : The application 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf' is downloaded to processor 'ps7_cortexa9_0'.
+10:29:44 INFO  : 'configparams force-mem-access 0' command is executed.
+10:29:44 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*"}
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}
+fpga -file C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+targets -set -nocase -filter {name =~"APU*"}
+loadhw -hw C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa -mem-ranges [list {0x40000000 0xbfffffff}] -regs
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*"}
+source C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "*A9*#0"}
+dow C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+10:29:44 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:29:44 INFO  : 'con' command is executed.
+10:29:44 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "*A9*#0"}
+con
+----------------End of Script----------------
+
+10:29:44 INFO  : Disconnected from the channel tcfchan#13.
+10:31:24 INFO  : Checking for BSP changes to sync application flags for project 'led_matrix_variable'...
+10:31:37 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:31:37 INFO  : Jtag cable 'Digilent Cora Z7 - 7007S 210370A9303AA' is selected.
+10:31:37 INFO  : 'jtag frequency' command is executed.
+10:31:37 INFO  : Context for 'APU' is selected.
+10:31:37 INFO  : System reset is completed.
+10:31:40 INFO  : 'after 3000' command is executed.
+10:31:41 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}' command is executed.
+10:31:42 INFO  : Device configured successfully with "C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit"
+10:31:42 INFO  : Context for 'APU' is selected.
+10:31:42 INFO  : Hardware design and registers information is loaded from 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa'.
+10:31:42 INFO  : 'configparams force-mem-access 1' command is executed.
+10:31:42 INFO  : Context for 'APU' is selected.
+10:31:42 INFO  : Sourcing of 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl' is done.
+10:31:42 INFO  : 'ps7_init' command is executed.
+10:31:42 INFO  : 'ps7_post_config' command is executed.
+10:31:42 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:31:42 INFO  : The application 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf' is downloaded to processor 'ps7_cortexa9_0'.
+10:31:42 INFO  : 'configparams force-mem-access 0' command is executed.
+10:31:42 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*"}
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}
+fpga -file C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+targets -set -nocase -filter {name =~"APU*"}
+loadhw -hw C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa -mem-ranges [list {0x40000000 0xbfffffff}] -regs
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*"}
+source C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "*A9*#0"}
+dow C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+10:31:43 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:31:43 INFO  : 'con' command is executed.
+10:31:43 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "*A9*#0"}
+con
+----------------End of Script----------------
+
+10:31:43 INFO  : Disconnected from the channel tcfchan#15.
+10:38:11 INFO  : Checking for BSP changes to sync application flags for project 'led_matrix_variable'...
+10:38:22 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:38:23 INFO  : Jtag cable 'Digilent Cora Z7 - 7007S 210370A9303AA' is selected.
+10:38:23 INFO  : 'jtag frequency' command is executed.
+10:38:23 INFO  : Context for 'APU' is selected.
+10:38:23 INFO  : System reset is completed.
+10:38:26 INFO  : 'after 3000' command is executed.
+10:38:26 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}' command is executed.
+10:38:27 INFO  : Device configured successfully with "C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit"
+10:38:27 INFO  : Context for 'APU' is selected.
+10:38:27 INFO  : Hardware design and registers information is loaded from 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa'.
+10:38:27 INFO  : 'configparams force-mem-access 1' command is executed.
+10:38:27 INFO  : Context for 'APU' is selected.
+10:38:27 INFO  : Sourcing of 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl' is done.
+10:38:27 INFO  : 'ps7_init' command is executed.
+10:38:27 INFO  : 'ps7_post_config' command is executed.
+10:38:27 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:38:28 INFO  : The application 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf' is downloaded to processor 'ps7_cortexa9_0'.
+10:38:28 INFO  : 'configparams force-mem-access 0' command is executed.
+10:38:28 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*"}
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}
+fpga -file C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+targets -set -nocase -filter {name =~"APU*"}
+loadhw -hw C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa -mem-ranges [list {0x40000000 0xbfffffff}] -regs
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*"}
+source C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "*A9*#0"}
+dow C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+10:38:28 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:38:28 INFO  : 'con' command is executed.
+10:38:28 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "*A9*#0"}
+con
+----------------End of Script----------------
+
+10:38:28 INFO  : Disconnected from the channel tcfchan#17.
+10:40:58 INFO  : Checking for BSP changes to sync application flags for project 'led_matrix_variable'...
+10:41:09 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:41:09 INFO  : Jtag cable 'Digilent Cora Z7 - 7007S 210370A9303AA' is selected.
+10:41:09 INFO  : 'jtag frequency' command is executed.
+10:41:09 INFO  : Context for 'APU' is selected.
+10:41:09 INFO  : System reset is completed.
+10:41:12 INFO  : 'after 3000' command is executed.
+10:41:12 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}' command is executed.
+10:41:14 INFO  : Device configured successfully with "C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit"
+10:41:14 INFO  : Context for 'APU' is selected.
+10:41:14 INFO  : Hardware design and registers information is loaded from 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa'.
+10:41:14 INFO  : 'configparams force-mem-access 1' command is executed.
+10:41:14 INFO  : Context for 'APU' is selected.
+10:41:14 INFO  : Sourcing of 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl' is done.
+10:41:14 INFO  : 'ps7_init' command is executed.
+10:41:14 INFO  : 'ps7_post_config' command is executed.
+10:41:14 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:41:14 INFO  : The application 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf' is downloaded to processor 'ps7_cortexa9_0'.
+10:41:14 INFO  : 'configparams force-mem-access 0' command is executed.
+10:41:14 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*"}
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}
+fpga -file C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+targets -set -nocase -filter {name =~"APU*"}
+loadhw -hw C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa -mem-ranges [list {0x40000000 0xbfffffff}] -regs
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*"}
+source C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "*A9*#0"}
+dow C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+10:41:15 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:41:15 INFO  : 'con' command is executed.
+10:41:15 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "*A9*#0"}
+con
+----------------End of Script----------------
+
+10:41:15 INFO  : Disconnected from the channel tcfchan#19.
+10:48:04 INFO  : Checking for BSP changes to sync application flags for project 'led_matrix_variable'...
+10:48:17 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:48:17 INFO  : Jtag cable 'Digilent Cora Z7 - 7007S 210370A9303AA' is selected.
+10:48:17 INFO  : 'jtag frequency' command is executed.
+10:48:17 INFO  : Context for 'APU' is selected.
+10:48:17 INFO  : System reset is completed.
+10:48:20 INFO  : 'after 3000' command is executed.
+10:48:20 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}' command is executed.
+10:48:21 INFO  : Device configured successfully with "C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit"
+10:48:21 INFO  : Context for 'APU' is selected.
+10:48:21 INFO  : Hardware design and registers information is loaded from 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa'.
+10:48:21 INFO  : 'configparams force-mem-access 1' command is executed.
+10:48:21 INFO  : Context for 'APU' is selected.
+10:48:21 INFO  : Sourcing of 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl' is done.
+10:48:21 INFO  : 'ps7_init' command is executed.
+10:48:21 INFO  : 'ps7_post_config' command is executed.
+10:48:21 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:48:22 INFO  : The application 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf' is downloaded to processor 'ps7_cortexa9_0'.
+10:48:22 INFO  : 'configparams force-mem-access 0' command is executed.
+10:48:22 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*"}
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}
+fpga -file C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+targets -set -nocase -filter {name =~"APU*"}
+loadhw -hw C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa -mem-ranges [list {0x40000000 0xbfffffff}] -regs
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*"}
+source C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "*A9*#0"}
+dow C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+10:48:22 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:48:22 INFO  : 'con' command is executed.
+10:48:22 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "*A9*#0"}
+con
+----------------End of Script----------------
+
+10:48:22 INFO  : Disconnected from the channel tcfchan#21.
+11:02:23 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+11:02:23 INFO  : Jtag cable 'Digilent Cora Z7 - 7007S 210370A9303AA' is selected.
+11:02:23 INFO  : 'jtag frequency' command is executed.
+11:02:23 INFO  : Context for 'APU' is selected.
+11:02:23 INFO  : System reset is completed.
+11:02:26 INFO  : 'after 3000' command is executed.
+11:02:26 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}' command is executed.
+11:02:28 INFO  : Device configured successfully with "C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit"
+11:02:28 INFO  : Context for 'APU' is selected.
+11:02:28 INFO  : Hardware design and registers information is loaded from 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa'.
+11:02:28 INFO  : 'configparams force-mem-access 1' command is executed.
+11:02:28 INFO  : Context for 'APU' is selected.
+11:02:28 INFO  : Sourcing of 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl' is done.
+11:02:28 INFO  : 'ps7_init' command is executed.
+11:02:28 INFO  : 'ps7_post_config' command is executed.
+11:02:28 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+11:02:28 INFO  : The application 'C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf' is downloaded to processor 'ps7_cortexa9_0'.
+11:02:28 INFO  : 'configparams force-mem-access 0' command is executed.
+11:02:28 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*"}
+rst -system
+after 3000
+targets -set -filter {jtag_cable_name =~ "Digilent Cora Z7 - 7007S 210370A9303AA" && level==0 && jtag_device_ctx=="jsn-Cora Z7 - 7007S-210370A9303AA-13722093-0"}
+fpga -file C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+targets -set -nocase -filter {name =~"APU*"}
+loadhw -hw C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/hw/Wrapper_Ch3_Correct_ETH.xsa -mem-ranges [list {0x40000000 0xbfffffff}] -regs
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*"}
+source C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/psinit/ps7_init.tcl
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "*A9*#0"}
+dow C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+11:02:28 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+11:02:28 INFO  : 'con' command is executed.
+11:02:28 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "*A9*#0"}
+con
+----------------End of Script----------------
+
+11:02:28 INFO  : Disconnected from the channel tcfchan#22.

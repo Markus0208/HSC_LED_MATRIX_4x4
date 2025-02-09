@@ -1,0 +1,10 @@
+10:48:06 **** Incremental Build of configuration Debug for project led_matrix_variable_system ****
+make all 
+Generating bif file for the system project
+generate_system_bif.bat 51736 C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/Wrapper_Ch3_Correct_ETH.xpfm freertos10_xilinx_ps7_cortexa9_0 C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable_system/Debug/system.bif
+sdcard_gen --xpfm C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/Wrapper_Ch3_Correct_ETH.xpfm --sys_config Wrapper_Ch3_Correct_ETH --bif C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable_system/Debug/system.bif --bitstream C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit --elf C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/Debug/led_matrix_variable.elf,ps7_cortexa9_0
+creating BOOT.BIN using C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable/_ide/bitstream/Wrapper_Ch3_Correct_ETH.bit
+Running Z:/Xilinx/Vitis/2020.2/bin/bootgen  -image C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable_system/Debug/sd_card_temp/boot.bif -w -o i BOOT.BIN
+
+10:48:11 Build Finished (took 5s.982ms)
+

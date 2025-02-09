@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ASCII"?>
+<sdkproject:SdkProject xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:sdkproject="http://www.xilinx.com/sdkproject" name="led_matrix_variable" location="C:/Users/thego/Desktop/HSC_PNM/vitis_software/led_matrix_variable" platform="C:/Users/thego/Desktop/HSC_PNM/vitis_software/Wrapper_Ch3_Correct_ETH/export/Wrapper_Ch3_Correct_ETH/Wrapper_Ch3_Correct_ETH.xpfm" platformUID="xilinx:cora-z7-10::0.0(custom)" systemProject="led_matrix_variable_system" sysConfig="Wrapper_Ch3_Correct_ETH" runtime="cpp" cpu="freertos10_xilinx_ps7_cortexa9_0" cpuInstance="ps7_cortexa9_0" os="freertos10_xilinx" mssSignature="f177a16bed49e4596b52afad24a33b6e">
+  <configuration name="Debug" id="xilinx.gnu.armv7.exe.debug.415193454">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+    <lastBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <configuration name="Release" id="xilinx.gnu.armv7.exe.release.1662571434" dirty="true">
+    <configBuildOptions xsi:type="sdkproject:SdkOptions"/>
+  </configuration>
+  <template appTemplateName="freertos_lwip_echo_server" hasBspSettings="true"/>
+</sdkproject:SdkProject>
